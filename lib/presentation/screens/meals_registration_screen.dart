@@ -100,7 +100,11 @@ class _BodyView extends ConsumerWidget {
       final currentMeals = ref.read(mealListProvider);
       final updatedMeals = [...currentMeals, newMeal];
       ref.read(mealListProvider.notifier).state = updatedMeals;
-      print(newMeal);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Comida agregada con éxito'),
+        ),
+      );
     }
   }
 

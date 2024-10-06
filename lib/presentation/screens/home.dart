@@ -1,8 +1,6 @@
-import 'package:fittracker/core/router/app_router.dart';
 import 'package:fittracker/presentation/entities/meal.dart';
 import 'package:fittracker/presentation/providers/meal_list_provider.dart';
 import 'package:fittracker/presentation/providers/spot_list_provider.dart';
-import 'package:fittracker/presentation/screens/meals_list_screen.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,8 +72,13 @@ class _Graph extends ConsumerWidget {
     List<Meal> meals = ref.watch(mealListProvider);
     List<FlSpot> spots = meals.map((meal) {
       return FlSpot(
-          meal.dateTime.millisecondsSinceEpoch.toDouble(), meal.protein);
+        meal.dateTime.millisecondsSinceEpoch.toDouble(),
+        meal.protein,
+      );
     }).toList();
+
+    // Crear un conjunto para rastrear las fechas ya mostradas
+    final shownDates = <String>{};
 
     return Center(
       child: SizedBox(
@@ -85,21 +88,73 @@ class _Graph extends ConsumerWidget {
           LineChartData(
             lineBarsData: [
               LineChartBarData(
-                  spots: spots,
-                  color: Colors.amber,
-                  barWidth: 3,
-                  isCurved: true,
-                  curveSmoothness: 1,
-                  dotData: const FlDotData(
-                    show: false,
-                  )
+                spots: spots,
+                color: Colors.amber,
+                barWidth: 3,
+                dotData: const FlDotData(
+                  show: false,
+                ),
               ),
             ],
-            titlesData: const FlTitlesData(
-                topTitles:
-                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                rightTitles:
-                    AxisTitles(sideTitles: SideTitles(showTitles: false))),
+            titlesData: FlTitlesData(
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 40,
+                  getTitlesWidget: (value, meta) {
+                    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                    String formattedDate = '${dateTime.day}/${dateTime.month}';
+                    
+                    // Evitar mostrar fechas repetidas
+                    if (shownDates.add(formattedDate)) {
+                      return SideTitleWidget(
+                        axisSide: meta.axisSide,
+                        child: Text(
+                          formattedDate,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
+                    }
+                    // Si ya fue mostrada, no mostrar nada
+                    return Container(); 
+                  },
+                ),
+              ),
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 20,
+                  getTitlesWidget: (value, meta) {
+                    return SideTitleWidget(
+                      axisSide: meta.axisSide,
+                      child: Text(
+                        value.toInt().toString(),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.black,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            gridData: const FlGridData(show: true, drawVerticalLine: false, drawHorizontalLine: true),
+            borderData: FlBorderData(
+              show: true,
+              border: Border.all(
+                color: Colors.black,
+              ),
+            ),
           ),
         ),
       ),
