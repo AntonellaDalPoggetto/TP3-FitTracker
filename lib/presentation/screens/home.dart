@@ -1,6 +1,5 @@
 import 'package:fittracker/presentation/entities/meal.dart';
 import 'package:fittracker/presentation/providers/meal_list_provider.dart';
-import 'package:fittracker/presentation/providers/spot_list_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,27 +39,14 @@ class _BodyView extends StatelessWidget {
             context.go('/exercise_registration');
           },
           child: const Text("Agregar Ejercicio")),
-      const _InsertData(),
+      TextButton(
+          onPressed: () {
+            context.go('/graphics_modifier');
+          },
+          child: const Text("Mis gráficos")),
       const Text("Calorías x día"),
       const _Graph()
     ]);
-  }
-}
-
-class _InsertData extends ConsumerWidget {
-  const _InsertData();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    double count = 0;
-    return TextButton(
-        onPressed: () {
-          count++;
-          final currentSpots = ref.read(spotListProvider);
-          final updatedSpots = [...currentSpots, FlSpot(count, count)];
-          ref.read(spotListProvider.notifier).state = updatedSpots;
-        },
-        child: const Text("Nuevo punto"));
   }
 }
 
@@ -70,10 +56,21 @@ class _Graph extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Meal> meals = ref.watch(mealListProvider);
-    List<FlSpot> spots = meals.map((meal) {
-      return FlSpot(
-        meal.dateTime.millisecondsSinceEpoch.toDouble(),
-        meal.protein,
+
+    // Crear datos para el gráfico de barras
+    List<BarChartGroupData> barGroups = meals.asMap().entries.map((entry) {
+      int index = entry.key;
+      Meal meal = entry.value;
+      return BarChartGroupData(
+        x: index, // Usamos el índice como el eje X
+        barRods: [
+          BarChartRodData(
+            toY: meal.protein, // Mostrar las calorías consumidas
+            color: Colors.amber,
+            width: 8, // Más delgado
+            borderRadius: BorderRadius.zero, // Sin puntas curvadas
+          )
+        ],
       );
     }).toList();
 
@@ -84,29 +81,35 @@ class _Graph extends ConsumerWidget {
       child: SizedBox(
         width: 300,
         height: 200,
-        child: LineChart(
-          LineChartData(
-            lineBarsData: [
-              LineChartBarData(
-                spots: spots,
-                color: Colors.amber,
-                barWidth: 3,
-                dotData: const FlDotData(
-                  show: false,
-                ),
-              ),
-            ],
+        child: BarChart(
+          BarChartData(
+            barGroups: barGroups,
             titlesData: FlTitlesData(
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: 40,
                   getTitlesWidget: (value, meta) {
-                    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-                    String formattedDate = '${dateTime.day}/${dateTime.month}';
-                    
-                    // Evitar mostrar fechas repetidas
-                    if (shownDates.add(formattedDate)) {
+                    if (value.toInt() >= 0 && value.toInt() < meals.length) {
+                      DateTime dateTime = meals[value.toInt()].dateTime;
+                      String formattedDate =
+                          '${dateTime.day}/${dateTime.month}';
+                      String formattedHour =
+                          '${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+
+                      // Si la fecha ya fue mostrada, mostrar también la hora
+                      if (!shownDates.add(formattedDate)) {
+                        return SideTitleWidget(
+                          axisSide: meta.axisSide,
+                          child: Text(
+                            '$formattedDate\n$formattedHour',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.black,
+                            ),
+                          ),
+                        );
+                      }
                       return SideTitleWidget(
                         axisSide: meta.axisSide,
                         child: Text(
@@ -118,8 +121,7 @@ class _Graph extends ConsumerWidget {
                         ),
                       );
                     }
-                    // Si ya fue mostrada, no mostrar nada
-                    return Container(); 
+                    return Container(); // Si no hay una fecha, no mostrar nada
                   },
                 ),
               ),
@@ -148,7 +150,8 @@ class _Graph extends ConsumerWidget {
                 ),
               ),
             ),
-            gridData: const FlGridData(show: true, drawVerticalLine: false, drawHorizontalLine: true),
+            gridData: const FlGridData(
+                show: true, drawVerticalLine: false, drawHorizontalLine: true),
             borderData: FlBorderData(
               show: true,
               border: Border.all(

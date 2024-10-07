@@ -35,9 +35,7 @@ class _BodyView extends ConsumerWidget {
   final TextEditingController _carbsController = TextEditingController();
   final TextEditingController _dateTimeController = TextEditingController();
 
-  _BodyView({
-    super.key,
-  });
+  _BodyView();
 
   void dispose() {
     _mealNameController.dispose();
@@ -76,37 +74,48 @@ class _BodyView extends ConsumerWidget {
   }
 
   void _validateAndSave(BuildContext context, WidgetRef ref) {
-    // Verificar que todos los campos estén completados
-    if (_mealNameController.text.isEmpty ||
-        _proteinController.text.isEmpty ||
-        _caloriesController.text.isEmpty ||
-        _carbsController.text.isEmpty ||
-        _dateTimeController.text.isEmpty) {
-      // Mostrar un mensaje de error
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, complete todos los campos.'),
-        ),
-      );
-    } else {
-      // Crear el objeto Meal y mostrarlo en consola
-      final Meal newMeal = Meal(
-        name: _mealNameController.text,
-        protein: double.parse(_proteinController.text),
-        calories: double.parse(_caloriesController.text),
-        carbs: double.parse(_carbsController.text),
-        dateTime: DateTime.parse(_dateTimeController.text)
-      );
-      final currentMeals = ref.read(mealListProvider);
-      final updatedMeals = [...currentMeals, newMeal];
-      ref.read(mealListProvider.notifier).state = updatedMeals;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Comida agregada con éxito'),
-        ),
-      );
-    }
+  // Verificar que todos los campos estén completados
+  if (_mealNameController.text.isEmpty ||
+      _proteinController.text.isEmpty ||
+      _caloriesController.text.isEmpty ||
+      _carbsController.text.isEmpty ||
+      _dateTimeController.text.isEmpty) {
+    // Mostrar un mensaje de error
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Por favor, complete todos los campos.'),
+      ),
+    );
+  } else {
+    // Crear el objeto Meal
+    final Meal newMeal = Meal(
+      name: _mealNameController.text,
+      protein: double.parse(_proteinController.text),
+      calories: double.parse(_caloriesController.text),
+      carbs: double.parse(_carbsController.text),
+      dateTime: DateTime.parse(_dateTimeController.text),
+    );
+
+    // Obtener las comidas actuales
+    final currentMeals = ref.read(mealListProvider);
+
+    // Agregar la nueva comida a la lista
+    final updatedMeals = [...currentMeals, newMeal];
+
+    // Ordenar las comidas por fecha (de más antiguo a más reciente)
+    updatedMeals.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+
+    // Actualizar el estado del provider con la lista ordenada
+    ref.read(mealListProvider.notifier).state = updatedMeals;
+
+    // Mostrar un mensaje de éxito
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Comida agregada con éxito'),
+      ),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
