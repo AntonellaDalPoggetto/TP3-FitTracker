@@ -1,3 +1,5 @@
+import 'package:fittracker/presentation/screens/bar_chart_example.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,24 +40,34 @@ class _BodyView extends ConsumerStatefulWidget {
 class _BodyViewState extends ConsumerState<_BodyView> {
   final List<Widget> _charts = []; // Lista para almacenar los gráficos
   String _selectedOption = 'Comida'; // Opción seleccionada por defecto
-  String _selectedDropdownOption = 'Proteínas'; // Opción seleccionada en el menú desplegable
-  List<String> _dropdownOptions = ['Proteínas', 'Carbohidratos', 'Calorías']; // Opciones para el menú desplegable
+  String _selectedDropdownOption =
+      'Proteínas'; // Opción seleccionada en el menú desplegable
+  List<String> _dropdownOptions = [
+    'Proteínas',
+    'Carbohidratos',
+    'Calorías'
+  ]; // Opciones para el menú desplegable
   String? _selectedExercise; // Para almacenar el ejercicio seleccionado
 
   // Función para agregar un gráfico basado en la opción seleccionada
   void _addChart() {
-    setState(() {
-      _charts.add(
-        CollapsibleChartWidget(
-          name: '$_selectedDropdownOption para $_selectedOption',
-        ),
-      );
-    });
+    try {
+      setState(() {
+        _charts.add(
+          CollapsibleChartWidget(
+            name: '$_selectedDropdownOption para $_selectedOption',
+          ),
+        );
+      });
+    } catch (error) {
+      print("Error al agregar gráfico: $error");
+    }
   }
 
   // Función para mostrar el diálogo de selección con un menú desplegable
   void _showOptionDialog(BuildContext context) {
-    final exerciseList = ref.watch(exerciseListProvider); // Obtener la lista de ejercicios desde el provider
+    final exerciseList = ref.watch(
+        exerciseListProvider); // Obtener la lista de ejercicios desde el provider
 
     showDialog(
       context: context,
@@ -75,9 +87,15 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     onChanged: (String? value) {
                       setState(() {
                         _selectedOption = value!;
-                        _selectedDropdownOption = 'Proteínas'; // Resetear la opción del dropdown
-                        _dropdownOptions = ['Proteínas', 'Carbohidratos', 'Calorías']; // Actualizar opciones
-                        _selectedExercise = null; // Resetear ejercicio seleccionado
+                        _selectedDropdownOption =
+                            'Proteínas'; // Resetear la opción del dropdown
+                        _dropdownOptions = [
+                          'Proteínas',
+                          'Carbohidratos',
+                          'Calorías'
+                        ]; // Actualizar opciones
+                        _selectedExercise =
+                            null; // Resetear ejercicio seleccionado
                       });
                     },
                   ),
@@ -88,16 +106,24 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     onChanged: (String? value) {
                       setState(() {
                         _selectedOption = value!;
-                        _selectedDropdownOption = 'Series'; // Resetear la opción del dropdown
-                        _dropdownOptions = ['Series', 'Repeticiones', 'Peso']; // Actualizar opciones
-                        _selectedExercise = null; // Resetear ejercicio seleccionado
+                        _selectedDropdownOption =
+                            'Series'; // Resetear la opción del dropdown
+                        _dropdownOptions = [
+                          'Series',
+                          'Repeticiones',
+                          'Peso'
+                        ]; // Actualizar opciones
+                        _selectedExercise =
+                            null; // Resetear ejercicio seleccionado
                       });
                     },
                   ),
                   const SizedBox(height: 20),
                   // Verificar si hay ejercicios en el provider
-                  if (_selectedOption == 'Ejercicio' && exerciseList.isEmpty) ...[
-                    const Text("No hay ejercicios cargados hasta el momento, agregue ejercicios e intente más tarde."),
+                  if (_selectedOption == 'Ejercicio' &&
+                      exerciseList.isEmpty) ...[
+                    const Text(
+                        "No hay ejercicios cargados hasta el momento, agregue ejercicios e intente más tarde."),
                     const SizedBox(height: 10),
                   ] else if (_selectedOption == 'Ejercicio') ...[
                     // Menú desplegable que muestra opciones dependiendo de la selección anterior
@@ -121,7 +147,8 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                       value: _selectedExercise,
                       hint: const Text('Selecciona un ejercicio'),
                       items: exerciseList
-                          .map((Exercise exercise) => exercise.name) // Extrae solo los nombres
+                          .map((Exercise exercise) =>
+                              exercise.name) // Extrae solo los nombres
                           .toSet() // Convierte a un conjunto para eliminar duplicados
                           .map((String name) => DropdownMenuItem<String>(
                                 value: name,
@@ -157,13 +184,15 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                 TextButton(
                   child: const Text('Cancelar'),
                   onPressed: () {
-                    Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+                    Navigator.of(context)
+                        .pop(); // Cerrar el diálogo sin hacer nada
                   },
                 ),
                 TextButton(
                   child: const Text('Aceptar'),
                   onPressed: () {
-                    if (_selectedOption == 'Ejercicio' && exerciseList.isEmpty) {
+                    if (_selectedOption == 'Ejercicio' &&
+                        exerciseList.isEmpty) {
                       // No permitir agregar el gráfico si no hay ejercicios
                       Navigator.of(context).pop(); // Cerrar el diálogo
                       return;
@@ -186,7 +215,8 @@ class _BodyViewState extends ConsumerState<_BodyView> {
       children: [
         TextButton(
           onPressed: () {
-            _showOptionDialog(context); // Mostrar el diálogo al presionar el botón
+            _showOptionDialog(
+                context); // Mostrar el diálogo al presionar el botón
           },
           child: const Text("Agregar nuevo gráfico"),
         ),
@@ -234,7 +264,8 @@ class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
                   ),
                   onPressed: () {
                     setState(() {
-                      _isExpanded = !_isExpanded; // Cambiar el estado de expansión
+                      _isExpanded =
+                          !_isExpanded; // Cambiar el estado de expansión
                     });
                   },
                 ),
@@ -242,13 +273,9 @@ class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
             ),
           ],
         ),
-        // Espacio para mostrar el gráfico (expandible)
-        if (_isExpanded) // Mostrar el gráfico solo si está expandido
-          Container(
-            height: 200, // Altura del gráfico
-            color: Colors.blue[100], // Color de fondo para representar el gráfico
-            child: Center(child: Text('${widget.name}')), // Placeholder para el gráfico
-          ),
+        // Simulación de gráfico
+        if (_isExpanded)
+          BarChartSample2()
       ],
     );
   }
