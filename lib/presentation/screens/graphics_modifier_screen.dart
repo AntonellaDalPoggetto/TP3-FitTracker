@@ -274,8 +274,7 @@ class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
           ],
         ),
         // Simulación de gráfico
-        if (_isExpanded)
-          BarChartSample2()
+        if (_isExpanded) BarChartSample2()
       ],
     );
   }
