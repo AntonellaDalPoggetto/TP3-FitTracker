@@ -50,6 +50,7 @@ class _HomeState extends State<Home> {
           child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              
               _Graph(),
               Center(child: Text("Desliza hacia arriba para ver más")),
             ],
