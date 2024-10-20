@@ -1,3 +1,4 @@
+import 'package:fittracker/presentation/providers/meal_list_provider.dart';
 import 'package:fittracker/presentation/screens/bar_chart_example.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,20 +40,40 @@ class _BodyView extends ConsumerStatefulWidget {
 class _BodyViewState extends ConsumerState<_BodyView> {
   final List<Widget> _charts = []; // Lista para almacenar los gráficos
   String _selectedOption = 'Comida'; // Opción seleccionada por defecto
-  String? _selectedDropdownOption; // Opción seleccionada por defecto en el menú desplegable
+  String? _selectedFoodValue =
+      "Proteínas"; // Opción seleccionada por defecto en el menú desplegable
   String? _selectedExercise; // Para almacenar el ejercicio seleccionado
 
-  final List<String> _comidaOptions = ['Proteínas', 'Carbohidratos', 'Calorías']; // Opciones para comida
+  final List<String> _comidaOptions = [
+    'Proteínas',
+    'Carbohidratos',
+    'Calorías'
+  ]; // Opciones para comida
 
   // Función para agregar un gráfico basado en la opción seleccionada
   void _addChart() {
     try {
+      String name =
+          _selectedOption; // proteinas, calorías, carbs, nombre de ejercicio
+      List<dynamic> data;
+      String? variable;
+
+      if (_selectedOption == 'Ejercicio' && _selectedExercise != null) {
+        data = ref.watch(exerciseListProvider);
+        variable = _selectedExercise;
+      } else {
+        data = ref.watch(mealListProvider);
+        variable = _selectedFoodValue;
+      }
+
       setState(() {
         _charts.add(
           CollapsibleChartWidget(
-            name: _selectedOption == 'Ejercicio' && _selectedExercise != null
-                ? 'Ejercicio: $_selectedExercise'
-                : 'Comida: $_selectedDropdownOption',
+            name: name,
+            chart: SimpleBarChart(
+              data: data,
+              variable: variable,
+            ),
           ),
         );
       });
@@ -84,8 +105,10 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     onChanged: (String? value) {
                       setState(() {
                         _selectedOption = value!;
-                        _selectedExercise = null; // Resetear ejercicio seleccionado
-                        _selectedDropdownOption = null; // Mostrar placeholder
+                        _selectedExercise =
+                            null; // Resetear ejercicio seleccionado
+                        _selectedFoodValue = _comidaOptions
+                            .first; // Reinicia el dropdown a la primera opción de comida
                       });
                     },
                   ),
@@ -96,17 +119,21 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     onChanged: (String? value) {
                       setState(() {
                         _selectedOption = value!;
-                        _selectedExercise = null; // Resetear ejercicio seleccionado
+                        _selectedFoodValue =
+                            null; // Resetear comida seleccionada
+                        if (exerciseList.isNotEmpty) {
+                          _selectedExercise = exerciseList.first
+                              .name; // Selecciona automáticamente el primer ejercicio
+                        }
                       });
                     },
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Mostrar dropdown solo para la opción "Comida"
-                  if (_selectedOption == 'Comida') 
+                  if (_selectedOption == 'Comida')
                     DropdownButton<String>(
-                      value: _selectedDropdownOption,
-                      hint: const Text('Selecciona un valor'),
+                      value: _selectedFoodValue,
                       items: _comidaOptions.map((String option) {
                         return DropdownMenuItem<String>(
                           value: option,
@@ -115,12 +142,13 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          _selectedDropdownOption = newValue!;
+                          _selectedFoodValue = newValue!;
                         });
                       },
                     ),
 
-                  if (_selectedOption == 'Ejercicio' && exerciseList.isEmpty) ...[
+                  if (_selectedOption == 'Ejercicio' &&
+                      exerciseList.isEmpty) ...[
                     const Text(
                         "No hay ejercicios cargados hasta el momento, agregue ejercicios e intente más tarde."),
                     const SizedBox(height: 10),
@@ -128,7 +156,6 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     // Menú desplegable con nombres de ejercicios
                     DropdownButton<String>(
                       value: _selectedExercise,
-                      hint: const Text('Selecciona un ejercicio'),
                       items: exerciseList
                           .map((Exercise exercise) =>
                               exercise.name) // Extrae solo los nombres
@@ -140,7 +167,7 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                           .toList(), // Crea una lista de DropdownMenuItem
                       onChanged: (String? newValue) {
                         setState(() {
-                          _selectedExercise = newValue;
+                          _selectedExercise = newValue!;
                         });
                       },
                     ),
@@ -158,12 +185,6 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                 TextButton(
                   child: const Text('Aceptar'),
                   onPressed: () {
-                    if (_selectedOption == 'Ejercicio' &&
-                        (exerciseList.isEmpty || _selectedExercise == null)) {
-                      // No permitir agregar el gráfico si no hay ejercicios o no se selecciona uno
-                      Navigator.of(context).pop(); // Cerrar el diálogo
-                      return;
-                    }
                     _addChart(); // Agregar el gráfico con la selección hecha
                     Navigator.of(context).pop(); // Cerrar el diálogo
                   },
@@ -195,8 +216,12 @@ class _BodyViewState extends ConsumerState<_BodyView> {
 
 class CollapsibleChartWidget extends StatefulWidget {
   final String name;
-
-  const CollapsibleChartWidget({super.key, required this.name});
+  final Widget chart;
+  const CollapsibleChartWidget({
+    super.key,
+    required this.name,
+    required this.chart,
+  });
 
   @override
   State<CollapsibleChartWidget> createState() => _CollapsibleChartWidgetState();
@@ -241,7 +266,7 @@ class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
           ],
         ),
         // Simulación de gráfico
-        if (_isExpanded) BarChartSample2()
+        if (_isExpanded) SizedBox(height: 300, child: widget.chart)
       ],
     );
   }

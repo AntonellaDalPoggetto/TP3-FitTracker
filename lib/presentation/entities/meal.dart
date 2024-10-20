@@ -5,12 +5,11 @@ class Meal {
   final double carbs;
   final DateTime dateTime;
 
-
   Meal({
-      required this.name,
-      required this.protein,
-      required this.calories,
-      required this.carbs,
-      required this.dateTime,
+    required this.name,
+    required this.protein,
+    required this.calories,
+    required this.carbs,
+    required this.dateTime,
   });
 }
