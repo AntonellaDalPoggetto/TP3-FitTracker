@@ -4,20 +4,147 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   static const String name = 'Home';
 
   const Home({super.key});
 
   @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int _selectedIndex = 0; // Para mantener el índice de la página seleccionada
+
+  // Aquí defines las páginas que se mostrarán según el índice
+  static const List<Widget> _widgetOptions = <Widget>[
+    _BodyView(), // Página principal
+    Text('Comidas'), // Página de comidas
+    Text('Ejercicio'), // Página de ejercicio
+    Text('Estadísticas'), // Página de estadísticas
+    Text('Perfil'), // Página de perfil
+  ];
+
+    @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Soy el $name'),
+    // Obtén la altura de la pantalla
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Establece minHeight y maxHeight como un porcentaje de la altura de la pantalla
+    double minHeight = screenHeight * 0.44; // 44% de la altura de la pantalla
+    double maxHeight = screenHeight * 0.88; // 88% de la altura de la pantalla
+return Scaffold(
+  appBar: AppBar(
+    title: _Header(), // Agrega tu header aquí
+  ),
+  body: SlidingUpPanel(
+    panel: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Espaciado uniforme entre gráficos
+          children: [
+            // Primer gráfico que ocupa 40% del ancho
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5, // 40% del ancho de la pantalla
+              height: 100, // Ajusta la altura según sea necesario
+              child: const _Graph(), // Primer gráfico
+            ),
+            // Segundo gráfico que ocupa 40% del ancho
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5, // 40% del ancho de la pantalla
+              height: 100, // Ajusta la altura según sea necesario
+              child: const _Graph(), // Segundo gráfico
+            ),
+          ],
+        ),
+        // Tercer gráfico que ocupa 80% del ancho
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.8, // 80% del ancho de la pantalla
+          height: 100, // Ajusta la altura según sea necesario
+          child: const _Graph(), // Tercer gráfico
+        ),
+      ],
+    ),
+    collapsed: Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFFEFF0F3),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      body: const Center(
-        child: _BodyView(),
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // Gráfico pequeño en el estado colapsado
+          SizedBox(
+            width: 60, // 60% del ancho de la pantalla
+            height: 60, // Ajusta la altura del gráfico
+            child: _Graph(), // Gráfico en estado colapsado
+          ),
+          SizedBox(height: 20), // Espacio entre el gráfico y el texto
+          Center(child: Text("Desliza hacia arriba para ver más")),
+        ],
+      ),
+    ),
+    body: Column(
+      children: [
+        Expanded(
+          child: _widgetOptions[_selectedIndex], // Cambia el contenido según el índice seleccionado
+        ),
+      ],
+    ),
+    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+    minHeight: minHeight,
+    maxHeight: maxHeight,
+    defaultPanelState: PanelState.CLOSED,
+  ),
+);
+
+  }
+}
+
+
+// Widget de encabezado que contiene el saludo, foto y subtítulo
+class _Header extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xFFFFFFFF), // Fondo blanco
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
+      ),
+      child: Row(
+        children: [
+          // Foto de perfil
+          const CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(
+                'https://example.com/tu-foto.jpg'), // Reemplaza con la URL de tu foto
+          ),
+          const SizedBox(width: 16), // Espacio entre la foto y el texto
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '¡Hola, Usuario!',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Bienvenido de nuevo',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -28,25 +155,474 @@ class _BodyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      TextButton(
-          onPressed: () {
-            context.go('/meals_registration');
+    Color colorGreen = const Color(0xFF34D399);
+    double screenWidth = MediaQuery.of(context).size.width;
+    ;
+    return Column(
+      children: [
+        // Primer carrusel con 6 botones
+        LayoutBuilder(
+          builder: (context, constraints) {
+            double screenHeight = MediaQuery.of(context).size.height;
+
+            double carouselHeight = screenHeight *
+                0.2; // Usa el maxHeight disponible del LayoutBuilder
+            double height1 = carouselHeight * 0.7;
+            double width1 = carouselHeight * 0.6; // 88% de la altura disponible
+
+            return CarouselSlider(
+              options: CarouselOptions(
+                height:
+                    carouselHeight, // Usa minHeight para la altura del carrusel
+                autoPlay: false,
+                enlargeCenterPage: true,
+                viewportFraction: 0.9,
+                enableInfiniteScroll: false,
+              ),
+              items: [
+                // Primera slide con 3 botones
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      height: height1,
+                      width: width1,
+                      child: Stack(
+                        alignment: Alignment
+                            .topCenter, // Centra el contenido en la parte superior
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              context.go('/meals_registration');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // Bordes redondeados
+                              ),
+                              side: BorderSide(
+                                color: colorGreen, // Color del borde
+                                width: 2, // Grosor del borde
+                              ),
+                              backgroundColor:
+                                  Colors.white, // Color de fondo del botón
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .end, // Alinea los elementos al final
+                              children: [
+                                SizedBox(
+                                    height:
+                                        8), // Espacio superior para centrar el texto
+                                Text(
+                                  'Agregar Comida',
+                                  textAlign: TextAlign
+                                      .center, // Alinea el texto al centro
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            top: height1 *
+                                0.1, // Ajusta este valor para posicionar el '+' donde lo necesites
+                            child: Container(
+                              width: height1 *
+                                  0.5, // Ajusta el tamaño según sea necesario
+                              height: height1 *
+                                  0.5, // Ajusta el tamaño según sea necesario
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: colorGreen, // Color de fondo del círculo
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    offset: Offset(0, 2),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    context.go(
+                                        '/meals_registration'); // Acción al presionar el texto
+                                  },
+                                  child: const Text(
+                                    '+',
+                                    style: TextStyle(
+                                      fontSize:
+                                          34, // Ajusta el tamaño del texto
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white, // Color del texto
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: height1,
+                      width: width1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.go('/meals_list');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(20), // Bordes redondeados
+                          ),
+                          side: BorderSide(
+                            color: colorGreen, // Color del borde
+                            width: 2, // Grosor del borde
+                          ),
+                          backgroundColor:
+                              Colors.white, // Color de fondo del botón
+                        ),
+                        child: const Text('Botón 2'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: height1,
+                      width: width1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.go('/meals_list');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(20), // Bordes redondeados
+                          ),
+                          side: BorderSide(
+                            color: colorGreen, // Color del borde
+                            width: 2, // Grosor del borde
+                          ),
+                          backgroundColor:
+                              Colors.white, // Color de fondo del botón
+                        ),
+                        child: const Text('Botón 3'),
+                      ),
+                    ),
+                  ],
+                ),
+                // Segunda slide con 3 botones
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      height: height1,
+                      width: width1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.go('/meals_list');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(20), // Bordes redondeados
+                          ),
+                          side: const BorderSide(
+                            color: Color(0xFF34D399), // Color del borde
+                            width: 2, // Grosor del borde
+                          ),
+                          backgroundColor:
+                              Colors.white, // Color de fondo del botón
+                        ),
+                        child: const Text('Botón 4'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: height1,
+                      width: width1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.go('/meals_list');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(20), // Bordes redondeados
+                          ),
+                          side: BorderSide(
+                            color: colorGreen, // Color del borde
+                            width: 2, // Grosor del borde
+                          ),
+                          backgroundColor:
+                              Colors.white, // Color de fondo del botón
+                        ),
+                        child: const Text('Botón 5'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: height1,
+                      width: width1,
+                      child: Stack(
+                        alignment: Alignment
+                            .topCenter, // Centra el contenido en la parte superior
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              context.go(
+                                  '/meals_list'); // Cambia la ruta a historial
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // Bordes redondeados
+                              ),
+                              side: BorderSide(
+                                color: colorGreen, // Color del borde
+                                width: 2, // Grosor del borde
+                              ),
+                              backgroundColor:
+                                  Colors.white, // Color de fondo del botón
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .end, // Alinea los elementos al final
+                              children: [
+                                SizedBox(
+                                    height:
+                                        8), // Espacio superior para centrar el texto
+                                Text(
+                                  'Ver Historial', // Cambia el texto a "Ver Historial"
+                                  textAlign: TextAlign
+                                      .center, // Alinea el texto al centro
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            top: height1 *
+                                0.1, // Ajusta este valor para posicionar el ícono
+                            child: Container(
+                              width: height1 *
+                                  0.5, // Ajusta el tamaño según sea necesario
+                              height: height1 *
+                                  0.5, // Ajusta el tamaño según sea necesario
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: colorGreen, // Color de fondo del círculo
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    offset: Offset(0, 2),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    context.go(
+                                        '/meals_list'); // Acción al presionar el ícono
+                                  },
+                                  child: const Icon(
+                                    Icons
+                                        .history, // Cambia el texto '+' por el icono del historial
+                                    size:
+                                        34, // Ajusta el tamaño del icono según lo necesites
+                                    color: Colors.white, // Color del icono
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
           },
-          child: const Text("Agregar comida")),
-      TextButton(
-          onPressed: () {
-            context.go('/exercise_registration');
-          },
-          child: const Text("Agregar Ejercicio")),
-      TextButton(
-          onPressed: () {
-            context.go('/graphics_modifier');
-          },
-          child: const Text("Mis gráficos")),
-      const Text("Calorías x día"),
-      const _Graph()
-    ]);
+        ),
+
+        // Segundo carrusel con un botón y un rectángulo redondeado
+        CarouselSlider(
+          options: CarouselOptions(
+            height: 75.0, // Altura del carrusel reducida
+            autoPlay: false,
+            enlargeCenterPage: true,
+            viewportFraction: 0.9,
+            enableInfiniteScroll: false,
+          ),
+          items: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  height: 60,
+                  width: screenWidth * 0.4,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.go('/exercise_registration');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(20), // Bordes redondeados
+                      ),
+                      side: BorderSide(
+                        color: colorGreen, // Color del borde
+                        width: 2, // Grosor del borde
+                      ),
+                      backgroundColor: Colors.white, // Color de fondo del botón
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .start, // Alinea el contenido a la izquierda
+                      children: [
+                        Container(
+                          width: 24, // Ajusta el tamaño según sea necesario
+                          height: 24, // Ajusta el tamaño según sea necesario
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: colorGreen, // Color de fondo del círculo
+                          ),
+                          child: const Center(
+                            child: Text(
+                              '+',
+                              style: TextStyle(
+                                fontSize: 18, // Ajusta el tamaño del texto
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white, // Color del texto
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                            width: 8), // Espacio entre el símbolo y el texto
+                        const Text(
+                          'Añadir\n'
+                          'Ejercicio',
+                          style:
+                              TextStyle(color: Colors.black), // Color del texto
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 60,
+                  width: screenWidth * 0.4,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8), // Añade espacio horizontal
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Color de fondo del contenedor
+                      borderRadius: BorderRadius.circular(30.0),
+                      border: Border.all(
+                        color: const Color(0xFF34D399), // Color del borde
+                        width: 2, // Grosor del borde
+                      ),
+                    ),
+                    alignment: Alignment
+                        .center, // Centra el contenido dentro del contenedor
+                    child: const Text(
+                      '80% de Metas Alcanzadas',
+                      textAlign:
+                          TextAlign.center, // Centra el texto horizontalmente
+                      style: TextStyle(
+                        color: Colors.black, // Color del texto
+                        fontSize: 16, // Ajusta el tamaño del texto
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  height: 60,
+                  width: screenWidth * 0.4,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8), // Añade espacio horizontal
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Color de fondo del contenedor
+                      borderRadius: BorderRadius.circular(30.0),
+                      border: Border.all(
+                        color: const Color(0xFF34D399), // Color del borde
+                        width: 2, // Grosor del borde
+                      ),
+                    ),
+                    alignment: Alignment
+                        .center, // Centra el contenido dentro del contenedor
+                    child: const Text(
+                      '80% de Metas Alcanzadas',
+                      textAlign:
+                          TextAlign.center, // Centra el texto horizontalmente
+                      style: TextStyle(
+                        color: Colors.black, // Color del texto
+                        fontSize: 16, // Ajusta el tamaño del texto
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 60, // Altura del botón
+                  width: screenWidth *
+                      0.4, // Ancho proporcional al tamaño de pantalla
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.go('/meals_list'); // Acción al presionar el botón
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(20), // Bordes redondeados
+                      ),
+                      side: BorderSide(
+                        color: colorGreen, // Color del borde
+                        width: 2, // Grosor del borde
+                      ),
+                      backgroundColor: Colors.white, // Color de fondo del botón
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .start, // Alinea el contenido a la izquierda
+                      children: [
+                        Container(
+                          width: 24, // Tamaño del círculo
+                          height: 24,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: colorGreen, // Color de fondo del círculo
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.history, // Ícono de historial
+                              size: 18, // Tamaño del ícono
+                              color: Colors.white, // Color del ícono
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                            width: 8), // Espacio entre el símbolo y el texto
+                        const Text(
+                          'Ver\nHistorial', // Texto en dos líneas
+                          style: TextStyle(
+                            color: Colors.black, // Color del texto
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const Text("Calorías x día"),
+      ],
+    );
   }
 }
 
@@ -62,19 +638,18 @@ class _Graph extends ConsumerWidget {
       int index = entry.key;
       Meal meal = entry.value;
       return BarChartGroupData(
-        x: index, // Usamos el índice como el eje X
+        x: index,
         barRods: [
           BarChartRodData(
-            toY: meal.protein, // Mostrar las calorías consumidas
+            toY: meal.protein,
             color: Colors.amber,
-            width: 8, // Más delgado
-            borderRadius: BorderRadius.zero, // Sin puntas curvadas
+            width: 8,
+            borderRadius: BorderRadius.zero,
           )
         ],
       );
     }).toList();
 
-    // Crear un conjunto para rastrear las fechas ya mostradas
     final shownDates = <String>{};
 
     return Center(
@@ -88,74 +663,18 @@ class _Graph extends ConsumerWidget {
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 40,
-                  getTitlesWidget: (value, meta) {
-                    if (value.toInt() >= 0 && value.toInt() < meals.length) {
-                      DateTime dateTime = meals[value.toInt()].dateTime;
-                      String formattedDate =
-                          '${dateTime.day}/${dateTime.month}';
-                      String formattedHour =
-                          '${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+                  getTitlesWidget: (double value, TitleMeta meta) {
+                    final int index = value.toInt();
+                    if (index < 0 || index >= meals.length)
+                      return const Text('');
 
-                      // Si la fecha ya fue mostrada, mostrar también la hora
-                      if (!shownDates.add(formattedDate)) {
-                        return SideTitleWidget(
-                          axisSide: meta.axisSide,
-                          child: Text(
-                            '$formattedDate\n$formattedHour',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
-                            ),
-                          ),
-                        );
-                      }
-                      return SideTitleWidget(
-                        axisSide: meta.axisSide,
-                        child: Text(
-                          formattedDate,
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.black,
-                          ),
-                        ),
-                      );
-                    }
-                    return Container(); // Si no hay una fecha, no mostrar nada
+                    final String date = meals[index].dateTime.toString();
+                    if (shownDates.contains(date)) return const Text('');
+
+                    shownDates.add(date);
+                    return Text(date);
                   },
                 ),
-              ),
-              topTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 20,
-                  getTitlesWidget: (value, meta) {
-                    return SideTitleWidget(
-                      axisSide: meta.axisSide,
-                      child: Text(
-                        value.toInt().toString(),
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            gridData: const FlGridData(
-                show: true, drawVerticalLine: false, drawHorizontalLine: true),
-            borderData: FlBorderData(
-              show: true,
-              border: Border.all(
-                color: Colors.black,
               ),
             ),
           ),

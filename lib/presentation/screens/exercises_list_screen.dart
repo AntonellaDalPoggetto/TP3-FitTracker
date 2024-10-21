@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ExercisesListScreen extends StatelessWidget {
   static const String name = 'listado de ejercicios';
@@ -10,6 +11,12 @@ class ExercisesListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Soy el $name'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/home');
+          },
+        ),
       ),
       body: const Center(
         child: Text('Contenido del $name'),
