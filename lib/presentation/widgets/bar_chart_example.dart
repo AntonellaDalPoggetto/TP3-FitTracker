@@ -49,7 +49,7 @@ class _SimpleBarChartState extends ConsumerState<SimpleBarChart> {
         graphData.add(BarChartGroupData(x: currentMeal.dateTime.millisecondsSinceEpoch, barRods: [
           BarChartRodData(toY: numberToShow, color: Colors.red, width: 5)
         ]));
-      });
+      }).toList();
     } else {
       List<Exercise> exercises = data as List<Exercise>;
       exercises = exercises.where((ex) => ex.name == widget.variable).toList();
