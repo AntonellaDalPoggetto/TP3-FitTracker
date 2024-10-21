@@ -28,11 +28,6 @@ class _HomeState extends State<Home> {
     Text('Perfil'), // Página de perfil
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,41 +51,20 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-        body: _widgetOptions[_selectedIndex], // Cambia el contenido según el índice seleccionado
+         body: Column( // Cambia aquí a Column
+        children: [
+          _Header(), // Agrega tu header aquí
+          Expanded(
+            child: _widgetOptions[_selectedIndex], // Cambia el contenido según el índice seleccionado
+          ),
+        ],
+      ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)), 
         minHeight: 440, 
         maxHeight: 800, 
         defaultPanelState: PanelState.CLOSED,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black, // Fondo oscuro para la barra de navegación
-        selectedItemColor: const Color(0xFF67B69B), // Color verde para el ícono seleccionado
-        unselectedItemColor: Colors.grey, // Color gris para íconos no seleccionados
-        currentIndex: _selectedIndex, // Asegúrate de que esta variable se actualice correctamente
-        onTap: _onItemTapped, // Llama a tu función para manejar el toque
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
-            label: 'Comidas',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Ejercicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Estadísticas',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
-      ),
+    
     );
   }
 }
@@ -162,12 +136,27 @@ class _BodyView extends StatelessWidget {
             children: [
               SizedBox(
                 height: 100,
-                width: 100,
+                width: 120,
                 child: ElevatedButton(
                   onPressed: () {
                     context.go('/meals_registration');
                   },
-                  child: const Text('Agregar Comida'),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20), // Bordes redondeados
+                  ),
+
+                  ),
+                  child: const Column(
+                 mainAxisAlignment: MainAxisAlignment.end, // Alínea los elementos al final
+                  children: [
+        SizedBox(height: 8), // Espacio superior para centrar el texto
+        Text(
+          'Agregar Comida',
+          textAlign: TextAlign.center, // Alinea el texto al centro
+        ),
+      ],
+    ),
                 ),
               ),
               SizedBox(
@@ -230,6 +219,10 @@ class _BodyView extends StatelessWidget {
           ),
         ],
       ),
+
+
+
+      
       // Segundo carrusel con un botón y un rectángulo redondeado
       CarouselSlider(
         options: CarouselOptions(
