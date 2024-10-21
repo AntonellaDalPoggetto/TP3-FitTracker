@@ -29,8 +29,15 @@ class _HomeState extends State<Home> {
   ];
 
 
-  @override
+   @override
   Widget build(BuildContext context) {
+    // Obtén la altura de la pantalla
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Establece minHeight y maxHeight como un porcentaje de la altura de la pantalla
+    double minHeight = screenHeight * 0.4; // 40% de la altura de la pantalla
+    double maxHeight = screenHeight * 0.8; // 80% de la altura de la pantalla
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Soy el ${_widgetOptions[_selectedIndex]}'),
@@ -40,31 +47,29 @@ class _HomeState extends State<Home> {
         collapsed: Container(
           decoration: const BoxDecoration(
             color: Color(0xFFEFF0F3),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)), 
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              
               _Graph(),
               Center(child: Text("Desliza hacia arriba para ver más")),
             ],
           ),
         ),
-         body: Column( // Cambia aquí a Column
-        children: [
-          _Header(), // Agrega tu header aquí
-          Expanded(
-            child: _widgetOptions[_selectedIndex], // Cambia el contenido según el índice seleccionado
-          ),
-        ],
-      ),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)), 
-        minHeight: 440, 
-        maxHeight: 800, 
+        body: Column(
+          children: [
+            _Header(), // Agrega tu header aquí
+            Expanded(
+              child: _widgetOptions[_selectedIndex], // Cambia el contenido según el índice seleccionado
+            ),
+          ],
+        ),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        minHeight: minHeight,
+        maxHeight: maxHeight,
         defaultPanelState: PanelState.CLOSED,
       ),
-    
     );
   }
 }
@@ -134,51 +139,83 @@ class _BodyView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(
-                height: 100,
-                width: 120,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.go('/meals_registration');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // Bordes redondeados
-                  ),
-
-                  ),
-                  child: const Column(
-                 mainAxisAlignment: MainAxisAlignment.end, // Alínea los elementos al final
-                  children: [
-        SizedBox(height: 8), // Espacio superior para centrar el texto
-        Text(
-          'Agregar Comida',
-          textAlign: TextAlign.center, // Alinea el texto al centro
+             SizedBox(
+  height: 100,
+  width: 120,
+  child: Stack(
+    alignment: Alignment.topCenter, // Centra el contenido en la parte superior
+    children: [
+      ElevatedButton(
+        onPressed: () {
+          context.go('/meals_registration');
+        },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20), // Bordes redondeados
+          ),
         ),
-      ],
-    ),
-                ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.end, // Alinea los elementos al final
+          children: [
+            SizedBox(height: 8), // Espacio superior para centrar el texto
+            Text(
+              'Agregar Comida',
+              textAlign: TextAlign.center, // Alinea el texto al centro
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        top: -10, // Ajusta este valor para posicionar el '+' donde lo necesites
+        child: Container(
+          width: 24, // Ajusta el tamaño según sea necesario
+          height: 24, // Ajusta el tamaño según sea necesario
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white, // Color de fondo del círculo
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                offset: Offset(0, 2),
+                blurRadius: 4,
               ),
-              SizedBox(
-                height: 100,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.go('/meals_list');
-                  },
-                  child: const Text('Botón 2'),
-                ),
+            ],
+          ),
+          child: const Center(
+            child: Text(
+              '+',
+              style: TextStyle(
+                fontSize: 18, // Ajusta el tamaño del texto
+                fontWeight: FontWeight.bold,
+                color: Colors.black, // Color del texto
               ),
-              SizedBox(
-                height: 100,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.go('/meals_list');
-                  },
-                  child: const Text('Botón 3'),
-                ),
-              ),
+            ),
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+SizedBox(
+  height: 100,
+  width: 100,
+  child: ElevatedButton(
+    onPressed: () {
+      context.go('/meals_list');
+    },
+    child: const Text('Botón 2'),
+  ),
+),
+SizedBox(
+  height: 100,
+  width: 100,
+  child: ElevatedButton(
+    onPressed: () {
+      context.go('/meals_list');
+    },
+    child: const Text('Botón 3'),
+  ),
+),
             ],
           ),
           // Segunda slide con 3 botones
