@@ -1,4 +1,4 @@
-import 'package:fittracker/presentation/providers/meal_list_provider.dart';
+import 'package:fittracker/presentation/providers/chart_provider.dart';
 import 'package:fittracker/presentation/widgets/bar_chart_example.dart';
 import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fittracker/presentation/providers/exersice_list_provider.dart';
 import 'package:fittracker/presentation/entities/exercise.dart';
-import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 
-// El provider para los gráficos
-final chartsProvider = StateProvider<List<CollapsibleChartWidget>>((ref) {
-  return [];
-});
 
 class GraphicsModifierScreen extends StatelessWidget {
   static const String name = 'modificador de gráficos';
