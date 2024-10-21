@@ -35,7 +35,7 @@ class _BodyView extends ConsumerWidget {
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _dateTimeController = TextEditingController();
 
-  _BodyView({super.key});
+  _BodyView();
 
   void dispose() {
     _exerciseNameController.dispose();

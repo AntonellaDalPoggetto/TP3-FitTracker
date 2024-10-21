@@ -1,10 +1,17 @@
 import 'package:fittracker/presentation/providers/meal_list_provider.dart';
-import 'package:fittracker/presentation/screens/bar_chart_example.dart';
+import 'package:fittracker/presentation/widgets/bar_chart_example.dart';
+import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fittracker/presentation/providers/exersice_list_provider.dart';
-import 'package:fittracker/presentation/entities/exercise.dart'; // Importa la clase Exercise
+import 'package:fittracker/presentation/entities/exercise.dart';
+import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
+
+// El provider para los gráficos
+final chartsProvider = StateProvider<List<CollapsibleChartWidget>>((ref) {
+  return [];
+});
 
 class GraphicsModifierScreen extends StatelessWidget {
   static const String name = 'modificador de gráficos';
@@ -23,69 +30,56 @@ class GraphicsModifierScreen extends StatelessWidget {
           },
         ),
       ),
-      body: const Center(
-        child: _BodyView(),
-      ),
+      body: const _BodyView(),
     );
   }
 }
 
 class _BodyView extends ConsumerStatefulWidget {
-  const _BodyView({super.key});
+  const _BodyView();
 
   @override
   ConsumerState<_BodyView> createState() => _BodyViewState();
 }
 
 class _BodyViewState extends ConsumerState<_BodyView> {
-  final List<Widget> _charts = []; // Lista para almacenar los gráficos
-  String _selectedOption = 'Comida'; // Opción seleccionada por defecto
-  String? _selectedFoodValue =
-      "Proteínas"; // Opción seleccionada por defecto en el menú desplegable
-  String? _selectedExercise; // Para almacenar el ejercicio seleccionado
+  String _selectedOption = 'Comida';
+  String? _selectedFoodValue = "Proteínas";
+  String? _selectedExercise;
 
-  final List<String> _comidaOptions = [
-    'Proteínas',
-    'Carbohidratos',
-    'Calorías'
-  ]; // Opciones para comida
+  final List<String> _comidaOptions = ['Proteínas', 'Carbohidratos', 'Calorías'];
 
-  // Función para agregar un gráfico basado en la opción seleccionada
   void _addChart() {
     try {
-      String name =
-          _selectedOption; // proteinas, calorías, carbs, nombre de ejercicio
-      List<dynamic> data;
+      String name = _selectedOption;
       String? variable;
 
       if (_selectedOption == 'Ejercicio' && _selectedExercise != null) {
-        data = ref.watch(exerciseListProvider);
         variable = _selectedExercise;
       } else {
-        data = ref.watch(mealListProvider);
         variable = _selectedFoodValue;
       }
 
-      setState(() {
-        _charts.add(
+      // Añadir el gráfico al provider en lugar de a una lista local
+      ref.read(chartsProvider.notifier).update((state) {
+        return [
+          ...state,
           CollapsibleChartWidget(
             name: name,
+            variable: variable,
             chart: SimpleBarChart(
-              data: data,
               variable: variable,
             ),
           ),
-        );
+        ];
       });
     } catch (error) {
       print("Error al agregar gráfico: $error");
     }
   }
 
-  // Función para mostrar el diálogo de selección
   void _showOptionDialog(BuildContext context) {
-    final exerciseList = ref.watch(
-        exerciseListProvider); // Obtener la lista de ejercicios desde el provider
+    final exerciseList = ref.watch(exerciseListProvider);
 
     showDialog(
       context: context,
@@ -97,7 +91,6 @@ class _BodyViewState extends ConsumerState<_BodyView> {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Radio buttons para seleccionar entre "Comida" y "Ejercicio"
                   RadioListTile<String>(
                     title: const Text('Comida'),
                     value: 'Comida',
@@ -105,10 +98,8 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     onChanged: (String? value) {
                       setState(() {
                         _selectedOption = value!;
-                        _selectedExercise =
-                            null; // Resetear ejercicio seleccionado
-                        _selectedFoodValue = _comidaOptions
-                            .first; // Reinicia el dropdown a la primera opción de comida
+                        _selectedExercise = null;
+                        _selectedFoodValue = _comidaOptions.first;
                       });
                     },
                   ),
@@ -119,18 +110,14 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     onChanged: (String? value) {
                       setState(() {
                         _selectedOption = value!;
-                        _selectedFoodValue =
-                            null; // Resetear comida seleccionada
+                        _selectedFoodValue = null;
                         if (exerciseList.isNotEmpty) {
-                          _selectedExercise = exerciseList.first
-                              .name; // Selecciona automáticamente el primer ejercicio
+                          _selectedExercise = exerciseList.first.name;
                         }
                       });
                     },
                   ),
                   const SizedBox(height: 20),
-
-                  // Mostrar dropdown solo para la opción "Comida"
                   if (_selectedOption == 'Comida')
                     DropdownButton<String>(
                       value: _selectedFoodValue,
@@ -146,25 +133,22 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                         });
                       },
                     ),
-
                   if (_selectedOption == 'Ejercicio' &&
                       exerciseList.isEmpty) ...[
                     const Text(
                         "No hay ejercicios cargados hasta el momento, agregue ejercicios e intente más tarde."),
                     const SizedBox(height: 10),
                   ] else if (_selectedOption == 'Ejercicio') ...[
-                    // Menú desplegable con nombres de ejercicios
                     DropdownButton<String>(
                       value: _selectedExercise,
                       items: exerciseList
-                          .map((Exercise exercise) =>
-                              exercise.name) // Extrae solo los nombres
-                          .toSet() // Convierte a un conjunto para eliminar duplicados
+                          .map((Exercise exercise) => exercise.name)
+                          .toSet()
                           .map((String name) => DropdownMenuItem<String>(
                                 value: name,
                                 child: Text(name),
                               ))
-                          .toList(), // Crea una lista de DropdownMenuItem
+                          .toList(),
                       onChanged: (String? newValue) {
                         setState(() {
                           _selectedExercise = newValue!;
@@ -178,15 +162,17 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                 TextButton(
                   child: const Text('Cancelar'),
                   onPressed: () {
-                    Navigator.of(context)
-                        .pop(); // Cerrar el diálogo sin hacer nada
+                    Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
                   child: const Text('Aceptar'),
                   onPressed: () {
-                    _addChart(); // Agregar el gráfico con la selección hecha
-                    Navigator.of(context).pop(); // Cerrar el diálogo
+                    if (!(_selectedOption == 'Ejercicio' &&
+                        exerciseList.isEmpty)) {
+                      _addChart();
+                    }
+                    Navigator.of(context).pop();
                   },
                 ),
               ],
@@ -199,75 +185,26 @@ class _BodyViewState extends ConsumerState<_BodyView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextButton(
-          onPressed: () {
-            _showOptionDialog(
-                context); // Mostrar el diálogo al presionar el botón
-          },
-          child: const Text("Agregar nuevo gráfico"),
-        ),
-        ..._charts, // Mostrar todos los gráficos añadidos
-      ],
-    );
-  }
-}
+    final charts = ref.watch(chartsProvider); // Obtenemos la lista de gráficos desde el provider
 
-class CollapsibleChartWidget extends StatefulWidget {
-  final String name;
-  final Widget chart;
-  const CollapsibleChartWidget({
-    super.key,
-    required this.name,
-    required this.chart,
-  });
-
-  @override
-  State<CollapsibleChartWidget> createState() => _CollapsibleChartWidgetState();
-}
-
-class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
-  bool _isExpanded = false; // Estado para controlar la expansión del gráfico
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Encabezado del gráfico
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(widget.name), // Nombre del gráfico
-            Row(
-              children: [
-                FilledButton(onPressed: () {}, child: const Text("Editar")),
-                IconButton(
-                  icon: const Icon(Icons.star),
-                  onPressed: () {
-                    // Acción al presionar el botón de estrella
-                  },
-                ),
-                IconButton(
-                  icon: RotatedBox(
-                    quarterTurns: _isExpanded ? 1 : 0, // Rotar la flecha
-                    child: const Icon(Icons.arrow_right),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isExpanded =
-                          !_isExpanded; // Cambiar el estado de expansión
-                    });
-                  },
-                ),
-              ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextButton(
+              onPressed: () {
+                _showOptionDialog(context);
+              },
+              child: const Text("Agregar nuevo gráfico"),
             ),
-          ],
-        ),
-        // Simulación de gráfico
-        if (_isExpanded) SizedBox(height: 300, child: widget.chart)
-      ],
+          ),
+          Column(
+            children: charts, // Mostramos los gráficos almacenados en el provider
+          ),
+        ],
+      ),
     );
   }
 }
