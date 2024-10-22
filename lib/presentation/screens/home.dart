@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0; // Para mantener el índice de la página seleccionada
+  final int _selectedIndex = 0; // Para mantener el índice de la página seleccionada
 
   // Aquí defines las páginas que se mostrarán según el índice
   static const List<Widget> _widgetOptions = <Widget>[
@@ -157,7 +157,6 @@ class _BodyView extends StatelessWidget {
   Widget build(BuildContext context) {
     Color colorGreen = const Color(0xFF34D399);
     double screenWidth = MediaQuery.of(context).size.width;
-    ;
     return Column(
       children: [
         // Primer carrusel con 6 botones
@@ -665,8 +664,9 @@ class _Graph extends ConsumerWidget {
                   showTitles: true,
                   getTitlesWidget: (double value, TitleMeta meta) {
                     final int index = value.toInt();
-                    if (index < 0 || index >= meals.length)
+                    if (index < 0 || index >= meals.length) {
                       return const Text('');
+                    }
 
                     final String date = meals[index].dateTime.toString();
                     if (shownDates.contains(date)) return const Text('');

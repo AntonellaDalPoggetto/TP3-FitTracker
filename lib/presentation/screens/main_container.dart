@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 class MainContainer extends StatefulWidget {
   final Widget child;
 
-  MainContainer({required this.child});
+  const MainContainer({super.key, required this.child});
 
   @override
   _MainContainerState createState() => _MainContainerState();
