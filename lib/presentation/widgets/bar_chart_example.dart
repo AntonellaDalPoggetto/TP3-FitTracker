@@ -25,7 +25,7 @@ class _SimpleBarChartState extends ConsumerState<SimpleBarChart> {
     double numberToShow = 0;
 
     if (expression) {
-      List<Meal> meals = data as List<Meal>;
+      List<Meal> meals = data;
       if (meals.length > 7) {
         meals = meals.sublist(meals.length - 7);
       }

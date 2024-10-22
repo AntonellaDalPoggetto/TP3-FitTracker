@@ -41,30 +41,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAYs1tgojs-KNpvrN9IlmfSjnAV_t5LLas',
-    appId: '1:856039071556:web:e3c4dbaa6d81fc29e68111',
-    messagingSenderId: '856039071556',
-    projectId: 'movieapp-d491b',
-    authDomain: 'movieapp-d491b.firebaseapp.com',
-    storageBucket: 'movieapp-d491b.appspot.com',
-    measurementId: 'G-VP5PYX1QCF',
+    apiKey: 'AIzaSyDi-G2lzkHv2-zjNhTz2uA1NReaAhRFELo',
+    appId: '1:862945235813:web:7294ff8dcf58b53a88078c',
+    messagingSenderId: '862945235813',
+    projectId: 'fittracker-db',
+    authDomain: 'fittracker-db.firebaseapp.com',
+    storageBucket: 'fittracker-db.appspot.com',
+    measurementId: 'G-03J78BMBYL',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBp__9SDHCcfBFix3D48_6DC9TiU8T3gaM',
-    appId: '1:856039071556:android:f08883a39c905d84e68111',
-    messagingSenderId: '856039071556',
-    projectId: 'movieapp-d491b',
-    storageBucket: 'movieapp-d491b.appspot.com',
+    apiKey: 'AIzaSyAh1BGy2vdSKgNKSfsLpdUuXf5VnJ1QmL0',
+    appId: '1:862945235813:android:9819b5942ec885ac88078c',
+    messagingSenderId: '862945235813',
+    projectId: 'fittracker-db',
+    storageBucket: 'fittracker-db.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA80BTw7kyEwawhlMd2JCdjbvViW7R_UoE',
-    appId: '1:856039071556:ios:ecb52ec153324ebfe68111',
-    messagingSenderId: '856039071556',
-    projectId: 'movieapp-d491b',
-    storageBucket: 'movieapp-d491b.appspot.com',
-    iosBundleId: 'com.example.movieApp',
+    apiKey: 'AIzaSyBS178DsbYAayVYYv7e29i6NTT9w1wMfgY',
+    appId: '1:862945235813:ios:c35863b8aa80502788078c',
+    messagingSenderId: '862945235813',
+    projectId: 'fittracker-db',
+    storageBucket: 'fittracker-db.appspot.com',
+    iosBundleId: 'com.example.fittracker',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
