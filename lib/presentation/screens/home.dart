@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+
 class Home extends StatefulWidget {
   static const String name = 'Home';
 
@@ -17,93 +18,89 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0; // Para mantener el índice de la página seleccionada
+  int _selectedIndex = 0;
 
-  // Aquí defines las páginas que se mostrarán según el índice
   static const List<Widget> _widgetOptions = <Widget>[
     _BodyView(), // Página principal
-    Text('Comidas'), // Página de comidas
-    Text('Ejercicio'), // Página de ejercicio
-    Text('Estadísticas'), // Página de estadísticas
-    Text('Perfil'), // Página de perfil
+    Text('Comidas'),
+    Text('Ejercicio'),
+    Text('Estadísticas'),
+    Text('Perfil'),
   ];
 
-    @override
+  @override
   Widget build(BuildContext context) {
-    // Obtén la altura de la pantalla
     double screenHeight = MediaQuery.of(context).size.height;
-
-    // Establece minHeight y maxHeight como un porcentaje de la altura de la pantalla
     double minHeight = screenHeight * 0.44; // 44% de la altura de la pantalla
     double maxHeight = screenHeight * 0.88; // 88% de la altura de la pantalla
-return Scaffold(
-  appBar: AppBar(
-    title: _Header(), // Agrega tu header aquí
-  ),
-  body: SlidingUpPanel(
-    panel: Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Espaciado uniforme entre gráficos
+
+    return Scaffold(
+      appBar: AppBar(
+        title: _Header(),
+      ),
+      body: SlidingUpPanel(
+        panel: Padding(
+          padding: const EdgeInsets.all(16.0), // Agrega un padding para que se vea mejor
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // Primer gráfico
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: 100,
+                    child: const _Graph(),
+                  ),
+                  // Segundo gráfico
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: 100,
+                    child: const _Graph(),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: 100,
+                child: const _Graph(), // Tercer gráfico
+              ),
+            ],
+          ),
+        ),
+        collapsed: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFFEFF0F3),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: const _Graph(), // Gráfico en estado colapsado
+              ),
+              SizedBox(height: 10),
+              Center(child: Text("Desliza hacia arriba para ver más")),
+            ],
+          ),
+        ),
+        body: Column(
           children: [
-            // Primer gráfico que ocupa 40% del ancho
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5, // 40% del ancho de la pantalla
-              height: 100, // Ajusta la altura según sea necesario
-              child: const _Graph(), // Primer gráfico
-            ),
-            // Segundo gráfico que ocupa 40% del ancho
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5, // 40% del ancho de la pantalla
-              height: 100, // Ajusta la altura según sea necesario
-              child: const _Graph(), // Segundo gráfico
+            Expanded(
+              child: _widgetOptions[_selectedIndex],
             ),
           ],
         ),
-        // Tercer gráfico que ocupa 80% del ancho
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8, // 80% del ancho de la pantalla
-          height: 100, // Ajusta la altura según sea necesario
-          child: const _Graph(), // Tercer gráfico
-        ),
-      ],
-    ),
-    collapsed: Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFFEFF0F3),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        minHeight: minHeight,
+        maxHeight: maxHeight,
+        defaultPanelState: PanelState.CLOSED,
       ),
-      child: const Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // Gráfico pequeño en el estado colapsado
-          SizedBox(
-            width: 60, // 60% del ancho de la pantalla
-            height: 60, // Ajusta la altura del gráfico
-            child: _Graph(), // Gráfico en estado colapsado
-          ),
-          SizedBox(height: 20), // Espacio entre el gráfico y el texto
-          Center(child: Text("Desliza hacia arriba para ver más")),
-        ],
-      ),
-    ),
-    body: Column(
-      children: [
-        Expanded(
-          child: _widgetOptions[_selectedIndex], // Cambia el contenido según el índice seleccionado
-        ),
-      ],
-    ),
-    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-    minHeight: minHeight,
-    maxHeight: maxHeight,
-    defaultPanelState: PanelState.CLOSED,
-  ),
-);
-
+    );
   }
 }
-
 
 // Widget de encabezado que contiene el saludo, foto y subtítulo
 class _Header extends StatelessWidget {
@@ -157,14 +154,15 @@ class _BodyView extends StatelessWidget {
   Widget build(BuildContext context) {
     Color colorGreen = const Color(0xFF34D399);
     double screenWidth = MediaQuery.of(context).size.width;
-    ;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         // Primer carrusel con 6 botones
         LayoutBuilder(
           builder: (context, constraints) {
             double screenHeight = MediaQuery.of(context).size.height;
-
+            double screenWidth = MediaQuery.of(context).size.width;
             double carouselHeight = screenHeight *
                 0.2; // Usa el maxHeight disponible del LayoutBuilder
             double height1 = carouselHeight * 0.7;
@@ -456,7 +454,7 @@ class _BodyView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  height: 60,
+                  height: screenHeight * 0.6,
                   width: screenWidth * 0.4,
                   child: ElevatedButton(
                     onPressed: () {
@@ -478,8 +476,8 @@ class _BodyView extends StatelessWidget {
                           .start, // Alinea el contenido a la izquierda
                       children: [
                         Container(
-                          width: 24, // Ajusta el tamaño según sea necesario
-                          height: 24, // Ajusta el tamaño según sea necesario
+                          width: 40, // Ajusta el tamaño según sea necesario
+                          height:  40, // Ajusta el tamaño según sea necesario
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: colorGreen, // Color de fondo del círculo
@@ -508,7 +506,7 @@ class _BodyView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 60,
+                  height: screenHeight * 0.4,
                   width: screenWidth * 0.4,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -540,7 +538,7 @@ class _BodyView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  height: 60,
+                  height: screenHeight * 0.6,
                   width: screenWidth * 0.4,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -567,7 +565,7 @@ class _BodyView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 60, // Altura del botón
+                  height: screenHeight * 0.6, // Altura del botón
                   width: screenWidth *
                       0.4, // Ancho proporcional al tamaño de pantalla
                   child: ElevatedButton(
@@ -590,8 +588,8 @@ class _BodyView extends StatelessWidget {
                           .start, // Alinea el contenido a la izquierda
                       children: [
                         Container(
-                          width: 24, // Tamaño del círculo
-                          height: 24,
+                          width: 40, // Tamaño del círculo
+                          height: 40,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: colorGreen, // Color de fondo del círculo
@@ -599,7 +597,7 @@ class _BodyView extends StatelessWidget {
                           child: const Center(
                             child: Icon(
                               Icons.history, // Ícono de historial
-                              size: 18, // Tamaño del ícono
+                              size: 24, // Tamaño del ícono
                               color: Colors.white, // Color del ícono
                             ),
                           ),
@@ -620,7 +618,6 @@ class _BodyView extends StatelessWidget {
             ),
           ],
         ),
-        const Text("Calorías x día"),
       ],
     );
   }
@@ -631,7 +628,7 @@ class _Graph extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Meal> meals = ref.watch(mealListProvider);
+    List<Meal> meals = ref.watch(mealListProvider); // Obteniendo la lista de comidas
 
     // Crear datos para el gráfico de barras
     List<BarChartGroupData> barGroups = meals.asMap().entries.map((entry) {
@@ -641,11 +638,11 @@ class _Graph extends ConsumerWidget {
         x: index,
         barRods: [
           BarChartRodData(
-            toY: meal.protein,
+            toY: meal.protein, // Asume que tienes una propiedad 'protein' en Meal
             color: Colors.amber,
             width: 8,
             borderRadius: BorderRadius.zero,
-          )
+          ),
         ],
       );
     }).toList();
@@ -665,8 +662,7 @@ class _Graph extends ConsumerWidget {
                   showTitles: true,
                   getTitlesWidget: (double value, TitleMeta meta) {
                     final int index = value.toInt();
-                    if (index < 0 || index >= meals.length)
-                      return const Text('');
+                    if (index < 0 || index >= meals.length) return const Text('');
 
                     final String date = meals[index].dateTime.toString();
                     if (shownDates.contains(date)) return const Text('');
