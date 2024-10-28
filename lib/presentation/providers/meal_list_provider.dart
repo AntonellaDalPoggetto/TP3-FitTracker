@@ -1,9 +1,34 @@
 import 'package:fittracker/presentation/entities/meal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Clase para gestionar la lista de comidas con filtro por nombre
+class MealListNotifier extends StateNotifier<List<Meal>> {
+  final List<Meal> allMeals;
 
-StateProvider<List<Meal>> mealListProvider = StateProvider<List<Meal>>((ref) {
-  return [
+  MealListNotifier(this.allMeals) : super(allMeals);
+
+  void filterByName(String query) {
+    if (query.isEmpty) {
+      state = allMeals;
+    } else {
+      state = allMeals
+          .where((meal) => meal.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+  }
+}
+
+// Define el provider para la lista de comidas
+final mealListProvider = StateNotifierProvider<MealListNotifier, List<Meal>>((ref) {
+  return MealListNotifier([
+    Meal(name: "Ensalada César", protein: 15.0, calories: 300.0, carbs: 10.0, dateTime: DateTime.now()),
+    Meal(name: "Pollo a la parrilla", protein: 35.0, calories: 400.0, carbs: 0.0, dateTime: DateTime.now().add(const Duration(days: 1))),
+    Meal(name: "Pasta con tomate", protein: 10.0, calories: 500.0, carbs: 70.0, dateTime: DateTime.now().add(const Duration(days: 2))),
+    // Agrega más comidas según necesites
+        //   Meal(name: "Ensalada César", protein: 15.0, calories: 300.0, carbs: 10.0, dateTime: DateTime.now()),
+    // Meal(name: "Pollo a la parrilla", protein: 35.0, calories: 400.0, carbs: 0.0, dateTime: DateTime.now().add(const Duration(days: 1))),
+    // Meal(name: "Pasta con tomate", protein: 10.0, calories: 500.0, carbs: 70.0, dateTime: DateTime.now().add(const Duration(days: 2))),
+    // Meal(name: "Salmón al horno", protein: 30.0, calories: 450.0, carbs: 0.0, dateTime: DateTime.now().add(const Duration(days: 3))),
   // Meal(name: "Ensalada César", protein: 15.0, calories: 300.0, carbs: 10.0, dateTime: DateTime.now()),
   // Meal(name: "Pollo a la parrilla", protein: 35.0, calories: 400.0, carbs: 0.0, dateTime: DateTime.now().add(const Duration(days: 1))),
   // Meal(name: "Pasta con tomate", protein: 10.0, calories: 500.0, carbs: 70.0, dateTime: DateTime.now().add(const Duration(days: 2))),
@@ -22,7 +47,5 @@ StateProvider<List<Meal>> mealListProvider = StateProvider<List<Meal>>((ref) {
   // Meal(name: "Filete de res", protein: 30.0, calories: 500.0, carbs: 0.0, dateTime: DateTime.now().add(const Duration(days: 15))),
   // Meal(name: "Yogur con frutas", protein: 10.0, calories: 200.0, carbs: 25.0, dateTime: DateTime.now().add(const Duration(days: 16))),
   // Meal(name: "Ensalada de garbanzos", protein: 15.0, calories: 300.0, carbs: 40.0, dateTime: DateTime.now().add(const Duration(days: 17))),
-];
-
-
+  ]);
 });

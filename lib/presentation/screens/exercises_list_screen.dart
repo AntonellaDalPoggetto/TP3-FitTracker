@@ -12,14 +12,14 @@ class ExercisesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
-        title: const Text('Historial de ejercicios'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.go('/home');
-          },
+
+         title: const Text(
+          'Historial de ejercicios',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+      
       ),
       body: const Center(
         child: _BodyView(),
@@ -55,7 +55,9 @@ class _BodyViewState extends ConsumerState<_BodyView> {
   Widget build(BuildContext context) {
     final exerciseList = ref.watch(exerciseListProvider);
 
-    return Column(
+     return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child:  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -86,7 +88,8 @@ class _BodyViewState extends ConsumerState<_BodyView> {
           ),
         ),
       ],
-    );
+    ),
+     );
   }
 }
 
