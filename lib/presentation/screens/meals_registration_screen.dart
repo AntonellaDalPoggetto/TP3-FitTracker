@@ -169,7 +169,7 @@ class _BodyView extends ConsumerWidget {
             ),
             onTap: () => _selectDateTime(context),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -195,7 +195,7 @@ class _BodyView extends ConsumerWidget {
                   vertical: 20,
                 ),
               ),
-              child: const Text("SAVE"),
+              child: const Text("GUARDAR"),
             ),
           )
         ],

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ExerciseRegistrationScreen extends StatelessWidget {
-  static const String name = 'registro de ejercicios';
+  static const String name = 'Registra tu ejercicio';
 
   const ExerciseRegistrationScreen({super.key});
 
@@ -13,7 +13,7 @@ class ExerciseRegistrationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Soy el $name'),
+        title: const Text(name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -76,55 +76,86 @@ class _BodyView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        TextField(
-          controller: _exerciseNameController,
-          decoration: const InputDecoration(
-            labelText: 'Nombre del ejercicio',
-            border: OutlineInputBorder(),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
+          TextField(
+            controller: _exerciseNameController,
+            decoration: const InputDecoration(
+              labelText: 'Nombre del ejercicio',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        TextField(
-          controller: _setsController,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            labelText: 'Número de series',
-            border: OutlineInputBorder(),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _setsController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Número de series',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        TextField(
-          controller: _repsController,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            labelText: 'Número de repeticiones',
-            border: OutlineInputBorder(),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _repsController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Número de repeticiones',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        TextField(
-          controller: _weightController,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            labelText: 'Peso levantado Kg',
-            border: OutlineInputBorder(),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _weightController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Peso levantado Kg',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        TextField(
-          controller: _dateTimeController,
-          readOnly: true,
-          decoration: const InputDecoration(
-            labelText: 'Seleccione la fecha y hora',
-            border: OutlineInputBorder(),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _dateTimeController,
+            readOnly: true,
+            decoration: const InputDecoration(
+              labelText: 'Seleccione la fecha y hora',
+              border: OutlineInputBorder(),
+            ),
+            onTap: () => _selectDateTime(context),
           ),
-          onTap: () => _selectDateTime(context),
-        ),
-        FilledButton(
-          onPressed: () {
-            _validateAndSave(context, ref);
-          },
-          child: const Text("Guardar ejercicio"),
-        ),
-      ],
+          const SizedBox(height: 20),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  offset: const Offset(
+                      1, 4), // Mover sombra "N" px a la derecha y "N" px abajo
+                  blurRadius: 4,
+                ),
+              ],
+            ),
+            child: ElevatedButton(
+              onPressed: () => _validateAndSave(context, ref),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF34D399),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                ),
+              ),
+              child: const Text("GUARDAR"),
+            ),
+          )
+        ],
+      ),
     );
   }
 
