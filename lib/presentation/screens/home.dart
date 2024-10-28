@@ -92,7 +92,7 @@ collapsed: Container(
         body: Column(
           children: [
             Expanded(
-              child: _widgetOptions[_selectedIndex],
+              child: _widgetOptions[_selectedIndex], //no se como funciona pero es todo lo de los carrouseles y eso
             ),
           ],
         ),
