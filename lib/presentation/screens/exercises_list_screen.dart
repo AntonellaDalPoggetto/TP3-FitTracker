@@ -55,7 +55,9 @@ class _BodyViewState extends ConsumerState<_BodyView> {
   Widget build(BuildContext context) {
     final exerciseList = ref.watch(exerciseListProvider);
 
-    return Column(
+     return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child:  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -86,7 +88,8 @@ class _BodyViewState extends ConsumerState<_BodyView> {
           ),
         ),
       ],
-    );
+    ),
+     );
   }
 }
 
