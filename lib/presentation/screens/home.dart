@@ -30,6 +30,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double minHeight = screenHeight * 0.44; // 44% de la altura de la pantalla
     double maxHeight = screenHeight * 0.88; // 88% de la altura de la pantalla
@@ -48,27 +49,28 @@ class _HomeState extends State<Home> {
                 children: [
                   // Primer gráfico
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: 100,
+                    width: screenWidth * 0.4,
+                    height: screenHeight *0.25,
                     child: const _Graph(),
                   ),
                   // Segundo gráfico
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: 100,
+                  width: screenWidth * 0.4,
+                    height: screenHeight *0.25,
                     child: const _Graph(),
                   ),
                 ],
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 100,
+               width: screenWidth * 0.4,
+                    height: screenHeight *0.5,
                 child: const _Graph(), // Tercer gráfico
               ),
             ],
           ),
         ),
-        collapsed: Container(
+      
+collapsed: Container(
           decoration: const BoxDecoration(
             color: Color(0xFFEFF0F3),
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -77,15 +79,16 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: 60,
-                height: 60,
-                child: const _Graph(), // Gráfico en estado colapsado
-              ),
+                    width: screenWidth * 0.4,
+                    height: screenHeight *0.25,
+                    child: const _Graph(),
+                  ),
               SizedBox(height: 10),
               Center(child: Text("Desliza hacia arriba para ver más")),
             ],
           ),
         ),
+        
         body: Column(
           children: [
             Expanded(
@@ -102,6 +105,7 @@ class _HomeState extends State<Home> {
   }
 }
 
+
 // Widget de encabezado que contiene el saludo, foto y subtítulo
 class _Header extends StatelessWidget {
   @override
@@ -117,7 +121,7 @@ class _Header extends StatelessWidget {
           const CircleAvatar(
             radius: 30,
             backgroundImage: NetworkImage(
-                'https://example.com/tu-foto.jpg'), // Reemplaza con la URL de tu foto
+                'https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png'), // Reemplaza con la URL de tu foto
           ),
           const SizedBox(width: 16), // Espacio entre la foto y el texto
           Expanded(
