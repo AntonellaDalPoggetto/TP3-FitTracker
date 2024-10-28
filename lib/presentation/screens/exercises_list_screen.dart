@@ -12,14 +12,14 @@ class ExercisesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
-        title: const Text('Historial de ejercicios'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.go('/home');
-          },
+
+         title: const Text(
+          'Historial de ejercicios',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+      
       ),
       body: const Center(
         child: _BodyView(),

@@ -16,8 +16,8 @@ class _MainContainerState extends State<MainContainer> {
   static final List<String> routes = <String>[
     '/home',
     '/meals_list',
-    '/exercises_list',
     '/graphics_modifier',
+    '/exercises_list',
     '/user_options',
   ];
 
@@ -58,8 +58,8 @@ class _MainContainerState extends State<MainContainer> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: 'Comidas'),
-          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Exercises'),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Graphics'),
+          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Exercises'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
         ],
       ),

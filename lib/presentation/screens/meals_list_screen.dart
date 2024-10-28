@@ -13,13 +13,12 @@ class MealsListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Historial de comidas'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.go('/home');
-          },
+
+         title: const Text(
+          'Historial de Comidas',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+      
       ),
       body: const Center(
         child: _BodyView(),

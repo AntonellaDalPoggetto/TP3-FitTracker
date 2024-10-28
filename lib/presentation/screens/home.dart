@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double minHeight = screenHeight * 0.44; // 44% de la altura de la pantalla
+    double minHeight = screenHeight * 0.5; // 44% de la altura de la pantalla
     double maxHeight = screenHeight * 0.88; // 88% de la altura de la pantalla
 
     return Scaffold(
@@ -165,281 +165,19 @@ class _BodyView extends StatelessWidget {
         // Primer carrusel con 6 botones
         LayoutBuilder(
           builder: (context, constraints) {
-            double screenHeight = MediaQuery.of(context).size.height;
-            double screenWidth = MediaQuery.of(context).size.width;
-            double carouselHeight = screenHeight *
-                0.2; // Usa el maxHeight disponible del LayoutBuilder
-            double height1 = carouselHeight * 0.7;
-            double width1 = carouselHeight * 0.6; // 88% de la altura disponible
+            double carouselHeight = screenHeight * 0.2;
+            double buttonHeight = carouselHeight * 0.7;
+            double buttonWidth = carouselHeight * 0.6;
 
             return CarouselSlider(
               options: CarouselOptions(
-                height:
-                    carouselHeight, // Usa minHeight para la altura del carrusel
+                height: carouselHeight,
                 autoPlay: false,
                 enlargeCenterPage: true,
                 viewportFraction: 0.9,
                 enableInfiniteScroll: false,
               ),
-              items: [
-                // Primera slide con 3 botones
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      height: height1,
-                      width: width1,
-                      child: Stack(
-                        alignment: Alignment
-                            .topCenter, // Centra el contenido en la parte superior
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              context.go('/meals_registration');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20), // Bordes redondeados
-                              ),
-                              side: BorderSide(
-                                color: colorGreen, // Color del borde
-                                width: 2, // Grosor del borde
-                              ),
-                              backgroundColor:
-                                  Colors.white, // Color de fondo del botón
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .end, // Alinea los elementos al final
-                              children: [
-                                SizedBox(
-                                    height:
-                                        8), // Espacio superior para centrar el texto
-                                Text(
-                                  'Agregar Comida',
-                                  textAlign: TextAlign
-                                      .center, // Alinea el texto al centro
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: height1 *
-                                0.1, // Ajusta este valor para posicionar el '+' donde lo necesites
-                            child: Container(
-                              width: height1 *
-                                  0.5, // Ajusta el tamaño según sea necesario
-                              height: height1 *
-                                  0.5, // Ajusta el tamaño según sea necesario
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: colorGreen, // Color de fondo del círculo
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    offset: Offset(0, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: InkWell(
-                                  onTap: () {
-                                    context.go(
-                                        '/meals_registration'); // Acción al presionar el texto
-                                  },
-                                  child: const Text(
-                                    '+',
-                                    style: TextStyle(
-                                      fontSize:
-                                          34, // Ajusta el tamaño del texto
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white, // Color del texto
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: height1,
-                      width: width1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.go('/meals_list');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20), // Bordes redondeados
-                          ),
-                          side: BorderSide(
-                            color: colorGreen, // Color del borde
-                            width: 2, // Grosor del borde
-                          ),
-                          backgroundColor:
-                              Colors.white, // Color de fondo del botón
-                        ),
-                        child: const Text('Botón 2'),
-                      ),
-                    ),
-                    SizedBox(
-                      height: height1,
-                      width: width1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.go('/meals_list');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20), // Bordes redondeados
-                          ),
-                          side: BorderSide(
-                            color: colorGreen, // Color del borde
-                            width: 2, // Grosor del borde
-                          ),
-                          backgroundColor:
-                              Colors.white, // Color de fondo del botón
-                        ),
-                        child: const Text('Botón 3'),
-                      ),
-                    ),
-                  ],
-                ),
-                // Segunda slide con 3 botones
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      height: height1,
-                      width: width1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.go('/meals_list');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20), // Bordes redondeados
-                          ),
-                          side: const BorderSide(
-                            color: Color(0xFF34D399), // Color del borde
-                            width: 2, // Grosor del borde
-                          ),
-                          backgroundColor:
-                              Colors.white, // Color de fondo del botón
-                        ),
-                        child: const Text('Botón 4'),
-                      ),
-                    ),
-                    SizedBox(
-                      height: height1,
-                      width: width1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.go('/meals_list');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20), // Bordes redondeados
-                          ),
-                          side: BorderSide(
-                            color: colorGreen, // Color del borde
-                            width: 2, // Grosor del borde
-                          ),
-                          backgroundColor:
-                              Colors.white, // Color de fondo del botón
-                        ),
-                        child: const Text('Botón 5'),
-                      ),
-                    ),
-                    SizedBox(
-                      height: height1,
-                      width: width1,
-                      child: Stack(
-                        alignment: Alignment
-                            .topCenter, // Centra el contenido en la parte superior
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              context.go(
-                                  '/meals_list'); // Cambia la ruta a historial
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20), // Bordes redondeados
-                              ),
-                              side: BorderSide(
-                                color: colorGreen, // Color del borde
-                                width: 2, // Grosor del borde
-                              ),
-                              backgroundColor:
-                                  Colors.white, // Color de fondo del botón
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .end, // Alinea los elementos al final
-                              children: [
-                                SizedBox(
-                                    height:
-                                        8), // Espacio superior para centrar el texto
-                                Text(
-                                  'Ver Historial', // Cambia el texto a "Ver Historial"
-                                  textAlign: TextAlign
-                                      .center, // Alinea el texto al centro
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: height1 *
-                                0.1, // Ajusta este valor para posicionar el ícono
-                            child: Container(
-                              width: height1 *
-                                  0.5, // Ajusta el tamaño según sea necesario
-                              height: height1 *
-                                  0.5, // Ajusta el tamaño según sea necesario
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: colorGreen, // Color de fondo del círculo
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    offset: Offset(0, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: InkWell(
-                                  onTap: () {
-                                    context.go(
-                                        '/meals_list'); // Acción al presionar el ícono
-                                  },
-                                  child: const Icon(
-                                    Icons
-                                        .history, // Cambia el texto '+' por el icono del historial
-                                    size:
-                                        34, // Ajusta el tamaño del icono según lo necesites
-                                    color: Colors.white, // Color del icono
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              items: _buildCarouselItems(buttonHeight, buttonWidth, colorGreen, context),
             );
           },
         ),
@@ -447,185 +185,323 @@ class _BodyView extends StatelessWidget {
         // Segundo carrusel con un botón y un rectángulo redondeado
         CarouselSlider(
           options: CarouselOptions(
-            height: 75.0, // Altura del carrusel reducida
+            height: 75.0,
             autoPlay: false,
             enlargeCenterPage: true,
             viewportFraction: 0.9,
             enableInfiniteScroll: false,
           ),
-          items: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  height: screenHeight * 0.6,
-                  width: screenWidth * 0.4,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.go('/exercise_registration');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20), // Bordes redondeados
-                      ),
-                      side: BorderSide(
-                        color: colorGreen, // Color del borde
-                        width: 2, // Grosor del borde
-                      ),
-                      backgroundColor: Colors.white, // Color de fondo del botón
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .start, // Alinea el contenido a la izquierda
-                      children: [
-                        Container(
-                          width: 40, // Ajusta el tamaño según sea necesario
-                          height:  40, // Ajusta el tamaño según sea necesario
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: colorGreen, // Color de fondo del círculo
-                          ),
-                          child: const Center(
-                            child: Text(
-                              '+',
-                              style: TextStyle(
-                                fontSize: 18, // Ajusta el tamaño del texto
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white, // Color del texto
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                            width: 8), // Espacio entre el símbolo y el texto
-                        const Text(
-                          'Añadir\n'
-                          'Ejercicio',
-                          style:
-                              TextStyle(color: Colors.black), // Color del texto
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.4,
-                  width: screenWidth * 0.4,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8), // Añade espacio horizontal
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Color de fondo del contenedor
-                      borderRadius: BorderRadius.circular(30.0),
-                      border: Border.all(
-                        color: const Color(0xFF34D399), // Color del borde
-                        width: 2, // Grosor del borde
-                      ),
-                    ),
-                    alignment: Alignment
-                        .center, // Centra el contenido dentro del contenedor
-                    child: const Text(
-                      '80% de Metas Alcanzadas',
-                      textAlign:
-                          TextAlign.center, // Centra el texto horizontalmente
-                      style: TextStyle(
-                        color: Colors.black, // Color del texto
-                        fontSize: 16, // Ajusta el tamaño del texto
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  height: screenHeight * 0.6,
-                  width: screenWidth * 0.4,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8), // Añade espacio horizontal
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Color de fondo del contenedor
-                      borderRadius: BorderRadius.circular(30.0),
-                      border: Border.all(
-                        color: const Color(0xFF34D399), // Color del borde
-                        width: 2, // Grosor del borde
-                      ),
-                    ),
-                    alignment: Alignment
-                        .center, // Centra el contenido dentro del contenedor
-                    child: const Text(
-                      '80% de Metas Alcanzadas',
-                      textAlign:
-                          TextAlign.center, // Centra el texto horizontalmente
-                      style: TextStyle(
-                        color: Colors.black, // Color del texto
-                        fontSize: 16, // Ajusta el tamaño del texto
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.6, // Altura del botón
-                  width: screenWidth *
-                      0.4, // Ancho proporcional al tamaño de pantalla
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.go('/meals_list'); // Acción al presionar el botón
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20), // Bordes redondeados
-                      ),
-                      side: BorderSide(
-                        color: colorGreen, // Color del borde
-                        width: 2, // Grosor del borde
-                      ),
-                      backgroundColor: Colors.white, // Color de fondo del botón
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .start, // Alinea el contenido a la izquierda
-                      children: [
-                        Container(
-                          width: 40, // Tamaño del círculo
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: colorGreen, // Color de fondo del círculo
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.history, // Ícono de historial
-                              size: 24, // Tamaño del ícono
-                              color: Colors.white, // Color del ícono
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                            width: 8), // Espacio entre el símbolo y el texto
-                        const Text(
-                          'Ver\nHistorial', // Texto en dos líneas
-                          style: TextStyle(
-                            color: Colors.black, // Color del texto
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+          items: _buildSecondaryCarousel(screenHeight, screenWidth, colorGreen, context),
         ),
       ],
     );
   }
+
+  List<Widget> _buildCarouselItems(double buttonHeight, double buttonWidth, Color colorGreen, BuildContext context) {
+  return [
+    _buildButtonRow(buttonHeight, buttonWidth, colorGreen, context, [
+      'Agregar Comida',
+      'Botón 2',
+      'Botón 3',
+    ]),
+    _buildButtonRow(buttonHeight, buttonWidth, colorGreen, context, [
+      'Botón 4',
+      'Botón 5',
+      'Ver Historial',
+    ]),
+  ];
 }
+
+Row _buildButtonRow(double height, double width, Color colorGreen, BuildContext context, List<String> buttonLabels) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: buttonLabels.map((label) {
+      if (label == 'Agregar Comida') {
+        return _buildSingleButton(height, width, colorGreen, context);
+      } else if (label == 'Ver Historial') {
+        return _buildStackedIconButton(height, width, colorGreen, context, label, Icons.history);
+      } else {
+        return _buildStandardButton(height, width, colorGreen, context, label);
+      }
+    }).toList(),
+  );
+}
+
+SizedBox _buildSingleButton(double height, double width, Color colorGreen, BuildContext context) {
+  return SizedBox(
+    height: height,
+    width: width,
+    child: Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            context.go('/meals_registration');
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            side: BorderSide(
+              color: colorGreen,
+              width: 2,
+            ),
+            backgroundColor: Colors.white,
+          ),
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(height: 8),
+              Text(
+                'Agregar Comida',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: height * 0.1,
+          child: Container(
+            width: height * 0.5,
+            height: height * 0.5,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: colorGreen,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: Offset(0, 2),
+                  blurRadius: 4,
+                ),
+              ],
+            ),
+            child: Center(
+              child: InkWell(
+                onTap: () {
+                  context.go('/meals_registration');
+                },
+                child: const Text(
+                  '+',
+                  style: TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+SizedBox _buildStandardButton(double height, double width, Color colorGreen, BuildContext context, String label) {
+  return SizedBox(
+    height: height,
+    width: width,
+    child: ElevatedButton(
+      onPressed: () {
+        context.go('/meals_list');
+      },
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        side: BorderSide(
+          color: colorGreen,
+          width: 2,
+        ),
+        backgroundColor: Colors.white,
+      ),
+      child: Text(label, textAlign: TextAlign.center),
+    ),
+  );
+}
+
+SizedBox _buildStackedIconButton(double height, double width, Color colorGreen, BuildContext context, String label, IconData icon) {
+  return SizedBox(
+    height: height,
+    width: width,
+    child: Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        _buildStandardButton(height, width, colorGreen, context, label),
+        Positioned(
+          top: height * 0.1,
+          child: _buildCircularIcon(colorGreen, context, icon, () {
+            context.go('/meals_list');
+          }),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildCircularIcon(Color colorGreen, BuildContext context, dynamic content, VoidCallback onTap) {
+  return Container(
+    width: 40,
+    height: 40,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: colorGreen,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2),
+          offset: Offset(0, 2),
+          blurRadius: 4,
+        ),
+      ],
+    ),
+    child: Center(
+      child: InkWell(
+        onTap: onTap,
+        child: content is String
+            ? Text(
+                content,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              )
+            : Icon(
+                content,
+                size: 24,
+                color: Colors.white,
+              ),
+      ),
+    ),
+  );
+}
+
+
+  List<Widget> _buildSecondaryCarousel(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
+  return [
+    _buildExerciseButtonRow(screenHeight, screenWidth, colorGreen, context),
+    _buildHistoryButtonRow(screenHeight, screenWidth, colorGreen, context), // Agregar la fila para el botón de historial
+  ];
+}
+
+Row _buildExerciseButtonRow(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      _buildExerciseButton(screenHeight, screenWidth, colorGreen, context),
+      _buildProgressContainer(screenHeight, screenWidth),
+    ],
+  );
+}
+
+Row _buildHistoryButtonRow(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+            _buildProgressContainer(screenHeight, screenWidth),
+            _buildHistoryButton(screenHeight, screenWidth, colorGreen, context), // Botón de ver historial
+    ],
+  );
+}
+
+SizedBox _buildExerciseButton(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
+  return SizedBox(
+    height: screenHeight * 0.6,
+    width: screenWidth * 0.4,
+    child: ElevatedButton(
+      onPressed: () {
+        context.go('/exercise_registration');
+      },
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        side: BorderSide(
+          color: colorGreen,
+          width: 2,
+        ),
+        backgroundColor: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildCircularIcon(colorGreen, context, '+', () {
+            context.go('/exercise_registration');
+          }),
+          const SizedBox(width: 8),
+          const Text(
+            'Añadir\nEjercicio',
+            style: TextStyle(color: Colors.black),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// Nueva función para el botón de "Ver Historial"
+SizedBox _buildHistoryButton(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
+  return SizedBox(
+    height: screenHeight * 0.6,
+    width: screenWidth * 0.4,
+    child: ElevatedButton(
+      onPressed: () {
+        context.go('/exercises_list'); // Cambia la ruta según sea necesario
+      },
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        side: BorderSide(
+          color: colorGreen,
+          width: 2,
+        ),
+        backgroundColor: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Icon(Icons.history, color: Colors.black), // Puedes cambiar el ícono según sea necesario
+          const SizedBox(width: 8),
+          const Text(
+            'Ver\nHistorial',
+            style: TextStyle(color: Colors.black),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+
+  SizedBox _buildProgressContainer(double screenHeight, double screenWidth) {
+    return SizedBox(
+      height: screenHeight * 0.4,
+      width: screenWidth * 0.4,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30.0),
+          border: Border.all(
+            color: const Color(0xFF34D399),
+            width: 2,
+          ),
+        ),
+        alignment: Alignment.center,
+        child: const Text(
+          '80% de Metas Alcanzadas',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 class _Graph extends ConsumerWidget {
   const _Graph();
