@@ -1,8 +1,23 @@
 import 'package:fittracker/presentation/entities/exercise.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-StateProvider<List<Exercise>> exerciseListProvider = StateProvider<List<Exercise>>((ref) {
-  return [
+class ExerciseListNotifier extends StateNotifier<List<Exercise>>{
+  final List<Exercise> allExercises;
+  ExerciseListNotifier(this.allExercises) : super(allExercises);
+
+  void filterByName(String query) {
+    if (query.isEmpty) {
+      state = allExercises;
+    } else {
+      state = allExercises
+          .where((exercise) => exercise.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+  }
+}
+
+final exerciseListProvider = StateNotifierProvider<ExerciseListNotifier, List<Exercise>>((ref) {
+  return ExerciseListNotifier([
     Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 20, dateTime: DateTime.now()),
     Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 30, dateTime: DateTime.now()),
     Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now()),
@@ -63,5 +78,5 @@ StateProvider<List<Exercise>> exerciseListProvider = StateProvider<List<Exercise
     Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 70, dateTime: DateTime.now().add(const Duration(days: 15))),
     Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 65, dateTime: DateTime.now().add(const Duration(days: 15))),
     
-  ];
+  ]);
 });
