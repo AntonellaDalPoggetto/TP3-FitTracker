@@ -27,27 +27,6 @@ class MealListNotifier extends StateNotifier<List<Meal>> {
     state = [...state, ...meals.docs.map((d) => d.data())];
   }
 
-  // Future<void> getAllMeals() async {
-  //   try {
-  //     final querySnapshot = await firestore.collection('Meal').get();
-
-  //     final meals = querySnapshot.docs.map((doc) {
-  //       final data = doc.data();
-  //       return Meal(
-  //         name: data['name'] ?? '',
-  //         protein: (data['protein'] ?? 0).toDouble(),
-  //         calories: (data['calories'] ?? 0).toDouble(),
-  //         carbs: (data['carbs'] ?? 0).toDouble(),
-  //         dateTime: (data['dateTime'] as Timestamp).toDate(),
-  //       );
-  //     }).toList();
-      
-  //     state = meals;
-  //   } catch (e) {      
-  //     print("Error al cargar las comidas desde Firebase: $e");
-  //   }
-  // }
-
   void filterByName(String query) {
     if (query.isEmpty) {
       getAllMeals();
