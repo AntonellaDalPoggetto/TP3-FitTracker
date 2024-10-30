@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:fittracker/presentation/providers/meal_list_provider.dart';
 import 'package:fittracker/presentation/entities/meal.dart';
 
