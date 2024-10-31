@@ -5,11 +5,11 @@ import 'package:fittracker/presentation/entities/meal.dart';
 class MealListNotifier extends StateNotifier<List<Meal>> {
 
   MealListNotifier() : super([]);
-  final firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> addMeal(Meal meal) async {
       
-    final doc = firestore.collection('Meal').doc();
+    final doc = _firestore.collection('Meal').doc();
     try {
       await doc.set(meal.toFirestore());
       state = [...state, meal];
@@ -20,7 +20,7 @@ class MealListNotifier extends StateNotifier<List<Meal>> {
 
   Future<void> getAllMeals() async {
 
-    final docs = firestore.collection('Meal').withConverter(
+    final docs = _firestore.collection('Meal').withConverter(
         fromFirestore: Meal.fromFirestore,
         toFirestore: (Meal meal, _) => meal.toFirestore());
     final meals = await docs.get();

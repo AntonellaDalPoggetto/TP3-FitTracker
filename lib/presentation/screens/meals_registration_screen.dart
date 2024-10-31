@@ -17,7 +17,7 @@ class MealsRegistrationScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/home');
+            context.pop();
           },
         ),
       ),
@@ -95,12 +95,14 @@ class _BodyView extends ConsumerWidget {
         dateTime: DateTime.parse(_dateTimeController.text),
       );
       ref.read(mealListProvider.notifier).addMeal(newMeal).then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Comida agregada con éxito'),
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Comida agregada con éxito'),
           ),
         );
-      }).catchError((e) {
+        context.go('/home');
+      }      
+      ).catchError((e) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Error al agregar la comida'),

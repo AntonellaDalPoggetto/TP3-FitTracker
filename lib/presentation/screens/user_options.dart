@@ -14,52 +14,25 @@ class UserOptions extends StatelessWidget {
           'Opciones de Usuario',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        elevation: 4.0, // Sombra debajo del AppBar
+        elevation: 4.0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Perfil'),
-              onTap: () {
-                // Navegar a la pantalla de perfil
-                context.go('/home');
-              },
-            ),
             ListTile(
               leading: const Icon(Icons.lock),
               title: const Text('Cambiar Contraseña'),
               onTap: () {
-                // Navegar a la pantalla de cambiar contraseña
-                context.go('/home');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.notifications),
-              title: const Text('Notificaciones'),
-              onTap: () {
-                // Navegar a la pantalla de notificaciones
-                context.go('/home');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.language),
-              title: const Text('Idioma'),
-              onTap: () {
-                // Navegar a la pantalla de selección de idioma
-                context.go('/home');
+                context.push('/home'); //falta crear la pantalla de cambio de contraseña
               },
             ),
             ListTile(
               leading: const Icon(Icons.info),
               title: const Text('Acerca de'),
               onTap: () {
-                // Navegar a la pantalla de información
-                context.go('/home');
+                context.push('/about_screen');
               },
             ),
             const Spacer(),
@@ -67,11 +40,11 @@ class UserOptions extends StatelessWidget {
               onPressed: () {
                 // Cerrar sesión
                 // Implementar la lógica de cierre de sesión aquí
-                context.go('/login');
+                context.push('/login');
               },
               child: const Text('Cerrar Sesión'),
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50), // Botón de ancho completo
+                minimumSize: const Size(double.infinity, 50),
               ),
             ),
           ],

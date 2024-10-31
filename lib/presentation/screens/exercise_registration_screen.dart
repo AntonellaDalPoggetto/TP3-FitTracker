@@ -17,7 +17,7 @@ class ExerciseRegistrationScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/home');
+            context.pop();
           },
         ),
       ),
@@ -69,7 +69,7 @@ class _BodyView extends ConsumerWidget {
         );
 
         _dateTimeController.text =
-            combinedDateTime.toString(); // Ajusta el formato si es necesario
+            combinedDateTime.toString();
       }
     }
   }
@@ -160,13 +160,11 @@ class _BodyView extends ConsumerWidget {
   }
 
   void _validateAndSave(BuildContext context, WidgetRef ref) {
-    // Verificar que todos los campos estén completados
     if (_exerciseNameController.text.isEmpty ||
         _setsController.text.isEmpty ||
         _repsController.text.isEmpty ||
         _weightController.text.isEmpty ||
         _dateTimeController.text.isEmpty) {
-      // Mostrar un mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Por favor, complete todos los campos.'),

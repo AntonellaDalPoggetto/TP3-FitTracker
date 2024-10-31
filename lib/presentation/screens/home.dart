@@ -1,8 +1,6 @@
-import 'package:fittracker/presentation/entities/meal.dart';
-import 'package:fittracker/presentation/providers/meal_list_provider.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:fittracker/presentation/widgets/home_graph.dart';
+import 'package:fittracker/presentation/widgets/button_info.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -21,7 +19,7 @@ class _HomeState extends State<Home> {
   final int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    _BodyView(), // Página principal
+    _BodyView(),
     Text('Comidas'),
     Text('Ejercicio'),
     Text('Estadísticas'),
@@ -47,24 +45,22 @@ class _HomeState extends State<Home> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // Primer gráfico
                   SizedBox(
                     width: screenWidth * 0.4,
                     height: screenHeight *0.25,
-                    child: const _Graph(),
+                    child: const Graph(),
                   ),
-                  // Segundo gráfico
                   SizedBox(
                   width: screenWidth * 0.4,
                     height: screenHeight *0.25,
-                    child: const _Graph(),
+                    child: const Graph(),
                   ),
                 ],
               ),
               SizedBox(
                width: screenWidth * 0.4,
                     height: screenHeight *0.5,
-                child: const _Graph(), // Tercer gráfico
+                child: const Graph(),
               ),
             ],
           ),
@@ -81,7 +77,7 @@ collapsed: Container(
               SizedBox(
                     width: screenWidth * 0.4,
                     height: screenHeight *0.25,
-                    child: const _Graph(),
+                    child: const Graph(),
                   ),
               SizedBox(height: 10),
               Center(child: Text("Desliza hacia arriba para ver más")),
@@ -92,7 +88,7 @@ collapsed: Container(
         body: Column(
           children: [
             Expanded(
-              child: _widgetOptions[_selectedIndex], //no se como funciona pero es todo lo de los carrouseles y eso
+              child: _widgetOptions[_selectedIndex],
             ),
           ],
         ),
@@ -105,25 +101,22 @@ collapsed: Container(
   }
 }
 
-
-// Widget de encabezado que contiene el saludo, foto y subtítulo
 class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFFFFFFF), // Fondo blanco
+        color: Color(0xFFFFFFFF),
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
       ),
       child: Row(
         children: [
-          // Foto de perfil
           const CircleAvatar(
             radius: 30,
             backgroundImage: NetworkImage(
-                'https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png'), // Reemplaza con la URL de tu foto
+                'https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png'),
           ),
-          const SizedBox(width: 16), // Espacio entre la foto y el texto
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +143,6 @@ class _Header extends StatelessWidget {
     );
   }
 }
-
 class _BodyView extends StatelessWidget {
   const _BodyView();
 
@@ -162,7 +154,6 @@ class _BodyView extends StatelessWidget {
 
     return Column(
       children: [
-        // Primer carrusel con 6 botones
         LayoutBuilder(
           builder: (context, constraints) {
             double carouselHeight = screenHeight * 0.2;
@@ -182,7 +173,6 @@ class _BodyView extends StatelessWidget {
           },
         ),
 
-        // Segundo carrusel con un botón y un rectángulo redondeado
         CarouselSlider(
           options: CarouselOptions(
             height: 75.0,
@@ -200,34 +190,22 @@ class _BodyView extends StatelessWidget {
   List<Widget> _buildCarouselItems(double buttonHeight, double buttonWidth, Color colorGreen, BuildContext context) {
   return [
     _buildButtonRow(buttonHeight, buttonWidth, colorGreen, context, [
-      'Agregar Comida',
-      'Botón 2',
-      'Botón 3',
-    ]),
-    _buildButtonRow(buttonHeight, buttonWidth, colorGreen, context, [
-      'Botón 4',
-      'Botón 5',
-      'Ver Historial',
+      ButtonInfo('Agregar Comida','/meals_registration'),
+      ButtonInfo('Agregar Ejercicio', '/exercise_registration'),
     ]),
   ];
 }
 
-Row _buildButtonRow(double height, double width, Color colorGreen, BuildContext context, List<String> buttonLabels) {
+Row _buildButtonRow(double height, double width, Color colorGreen, BuildContext context, List<ButtonInfo> buttonLabels) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: buttonLabels.map((label) {
-      if (label == 'Agregar Comida') {
-        return _buildSingleButton(height, width, colorGreen, context);
-      } else if (label == 'Ver Historial') {
-        return _buildStackedIconButton(height, width, colorGreen, context, label, Icons.history);
-      } else {
-        return _buildStandardButton(height, width, colorGreen, context, label);
-      }
+      return _buildSingleButton(height, width, colorGreen, label, context);
     }).toList(),
   );
 }
 
-SizedBox _buildSingleButton(double height, double width, Color colorGreen, BuildContext context) {
+SizedBox _buildSingleButton(double height, double width, Color colorGreen, ButtonInfo buttonInfo, BuildContext context) {
   return SizedBox(
     height: height,
     width: width,
@@ -236,7 +214,7 @@ SizedBox _buildSingleButton(double height, double width, Color colorGreen, Build
       children: [
         ElevatedButton(
           onPressed: () {
-            context.go('/meals_registration');
+            context.push(buttonInfo.screen);
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -248,12 +226,12 @@ SizedBox _buildSingleButton(double height, double width, Color colorGreen, Build
             ),
             backgroundColor: Colors.white,
           ),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               SizedBox(height: 8),
               Text(
-                'Agregar Comida',
+                buttonInfo.name,
                 textAlign: TextAlign.center,
               ),
             ],
@@ -278,7 +256,7 @@ SizedBox _buildSingleButton(double height, double width, Color colorGreen, Build
             child: Center(
               child: InkWell(
                 onTap: () {
-                  context.go('/meals_registration');
+                  context.push(buttonInfo.screen);
                 },
                 child: const Text(
                   '+',
@@ -291,48 +269,6 @@ SizedBox _buildSingleButton(double height, double width, Color colorGreen, Build
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-SizedBox _buildStandardButton(double height, double width, Color colorGreen, BuildContext context, String label) {
-  return SizedBox(
-    height: height,
-    width: width,
-    child: ElevatedButton(
-      onPressed: () {
-        context.go('/meals_list');
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        side: BorderSide(
-          color: colorGreen,
-          width: 2,
-        ),
-        backgroundColor: Colors.white,
-      ),
-      child: Text(label, textAlign: TextAlign.center),
-    ),
-  );
-}
-
-SizedBox _buildStackedIconButton(double height, double width, Color colorGreen, BuildContext context, String label, IconData icon) {
-  return SizedBox(
-    height: height,
-    width: width,
-    child: Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        _buildStandardButton(height, width, colorGreen, context, label),
-        Positioned(
-          top: height * 0.1,
-          child: _buildCircularIcon(colorGreen, context, icon, () {
-            context.go('/meals_list');
-          }),
         ),
       ],
     ),
@@ -379,74 +315,26 @@ Widget _buildCircularIcon(Color colorGreen, BuildContext context, dynamic conten
 
   List<Widget> _buildSecondaryCarousel(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
   return [
-    _buildExerciseButtonRow(screenHeight, screenWidth, colorGreen, context),
-    _buildHistoryButtonRow(screenHeight, screenWidth, colorGreen, context), // Agregar la fila para el botón de historial
+    _buildHistoryButtonRow(screenHeight, screenWidth, colorGreen, context),
   ];
 }
-
-Row _buildExerciseButtonRow(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      _buildExerciseButton(screenHeight, screenWidth, colorGreen, context),
-      _buildProgressContainer(screenHeight, screenWidth),
-    ],
-  );
-}
-
 Row _buildHistoryButtonRow(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
             _buildProgressContainer(screenHeight, screenWidth),
-            _buildHistoryButton(screenHeight, screenWidth, colorGreen, context), // Botón de ver historial
+            _buildHistoryButton(screenHeight, screenWidth, colorGreen, context),
     ],
   );
 }
 
-SizedBox _buildExerciseButton(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
-  return SizedBox(
-    height: screenHeight * 0.6,
-    width: screenWidth * 0.4,
-    child: ElevatedButton(
-      onPressed: () {
-        context.go('/exercise_registration');
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        side: BorderSide(
-          color: colorGreen,
-          width: 2,
-        ),
-        backgroundColor: Colors.white,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _buildCircularIcon(colorGreen, context, '+', () {
-            context.go('/exercise_registration');
-          }),
-          const SizedBox(width: 8),
-          const Text(
-            'Añadir\nEjercicio',
-            style: TextStyle(color: Colors.black),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-// Nueva función para el botón de "Ver Historial"
 SizedBox _buildHistoryButton(double screenHeight, double screenWidth, Color colorGreen, BuildContext context) {
   return SizedBox(
     height: screenHeight * 0.6,
     width: screenWidth * 0.4,
     child: ElevatedButton(
       onPressed: () {
-        context.go('/exercises_list'); // Cambia la ruta según sea necesario
+        context.push('/exercises_list'); // Cambia la ruta según sea necesario
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -461,7 +349,7 @@ SizedBox _buildHistoryButton(double screenHeight, double screenWidth, Color colo
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Icon(Icons.history, color: Colors.black), // Puedes cambiar el ícono según sea necesario
+          const Icon(Icons.history, color: Colors.black),
           const SizedBox(width: 8),
           const Text(
             'Ver\nHistorial',
@@ -495,64 +383,6 @@ SizedBox _buildHistoryButton(double screenHeight, double screenWidth, Color colo
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
-class _Graph extends ConsumerWidget {
-  const _Graph();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    List<Meal> meals = ref.watch(mealListProvider); // Obteniendo la lista de comidas
-
-    // Crear datos para el gráfico de barras
-    List<BarChartGroupData> barGroups = meals.asMap().entries.map((entry) {
-      int index = entry.key;
-      Meal meal = entry.value;
-      return BarChartGroupData(
-        x: index,
-        barRods: [
-          BarChartRodData(
-            toY: meal.protein, // Asume que tienes una propiedad 'protein' en Meal
-            color: Colors.amber,
-            width: 8,
-            borderRadius: BorderRadius.zero,
-          ),
-        ],
-      );
-    }).toList();
-
-    final shownDates = <String>{};
-
-    return Center(
-      child: SizedBox(
-        width: 300,
-        height: 200,
-        child: BarChart(
-          BarChartData(
-            barGroups: barGroups,
-            titlesData: FlTitlesData(
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  getTitlesWidget: (double value, TitleMeta meta) {
-                    final int index = value.toInt();
-                    if (index < 0 || index >= meals.length) return const Text('');
-
-                    final String date = meals[index].dateTime.toString();
-                    if (shownDates.contains(date)) return const Text('');
-
-                    shownDates.add(date);
-                    return Text(date);
-                  },
-                ),
-              ),
-            ),
           ),
         ),
       ),
