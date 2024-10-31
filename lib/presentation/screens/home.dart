@@ -116,7 +116,6 @@ class _HomeState extends State<Home> {
                     Text(
                       "Tus Gráficos Favoritos:",
                       style: GoogleFonts.rubik(
-                        // fontFamily: 'Rubik',
                         fontWeight: FontWeight.w800,
                         fontSize: 20,
                       ),
