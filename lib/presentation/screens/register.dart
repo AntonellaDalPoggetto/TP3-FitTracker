@@ -14,6 +14,7 @@ class Register extends ConsumerStatefulWidget {
 class _RegistrationView extends ConsumerState<Register> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+    final TextEditingController _userNameController = TextEditingController();
 
   void _register() async {
     final auth = ref.read(authProvider);
@@ -39,12 +40,36 @@ class _RegistrationView extends ConsumerState<Register> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+             const SizedBox(height: 20), // Espacio entre el AppBar y el título
+        Text(
+          'Registrarse',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF34D399), // Color verde personalizado
+          ),
+        ),
+        const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: _emailController,
                 decoration: const InputDecoration(
                   hintText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _userNameController,
+                decoration: const InputDecoration(
+                  hintText: 'Username',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
@@ -76,7 +101,7 @@ class _RegistrationView extends ConsumerState<Register> {
                   ),
               child: Text( style: TextStyle(
                     color: Colors.grey[700],
-                  ),'Registrarse'),
+                  ),'Crear cuenta'),
             ),
           ],
         ),

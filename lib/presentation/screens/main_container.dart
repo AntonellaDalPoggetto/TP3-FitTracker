@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
 import 'package:go_router/go_router.dart';
 
 class MainContainer extends StatefulWidget {
@@ -47,7 +48,20 @@ class _MainContainerState extends State<MainContainer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.child, 
+      body: PageTransitionSwitcher(
+        transitionBuilder: (
+          Widget child,
+          Animation<double> primaryAnimation,
+          Animation<double> secondaryAnimation,
+        ) {
+          return FadeThroughTransition(
+            animation: primaryAnimation,
+            secondaryAnimation: secondaryAnimation,
+            child: child,
+          );
+        },
+        child: widget.child, // Usa el widget actual de la ruta como hijo
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
         selectedItemColor: const Color(0xFF67B69B), 
