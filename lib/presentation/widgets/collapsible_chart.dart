@@ -15,36 +15,34 @@ class CollapsibleChartWidget extends StatefulWidget {
 }
 
 class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
-  bool _isExpanded = false; // Estado para controlar la expansión del gráfico
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Encabezado del gráfico
+      children: [        
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Gráfico de ${widget.variable}"), // Nombre del gráfico
+            Text("Gráfico de ${widget.variable}"),
             Row(
               children: [
                 FilledButton(onPressed: () {}, child: const Text("Editar")),
                 IconButton(
                   icon: const Icon(Icons.star),
                   onPressed: () {
-                    // Acción al presionar el botón de estrella
                   },
                 ),
                 IconButton(
                   icon: RotatedBox(
-                    quarterTurns: _isExpanded ? 1 : 0, // Rotar la flecha
+                    quarterTurns: _isExpanded ? 1 : 0,
                     child: const Icon(Icons.arrow_right),
                   ),
                   onPressed: () {
                     setState(() {
                       _isExpanded =
-                          !_isExpanded; // Cambiar el estado de expansión
+                          !_isExpanded;
                     });
                   },
                 ),
@@ -52,7 +50,6 @@ class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
             ),
           ],
         ),
-        // Simulación de gráfico
         if (_isExpanded)
           Column(
             children: [

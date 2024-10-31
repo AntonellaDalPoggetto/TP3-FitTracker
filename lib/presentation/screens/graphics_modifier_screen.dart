@@ -3,7 +3,6 @@ import 'package:fittracker/presentation/widgets/bar_chart_example.dart';
 import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:fittracker/presentation/providers/exersice_list_provider.dart';
 import 'package:fittracker/presentation/entities/exercise.dart';
 
@@ -17,14 +16,14 @@ class GraphicsModifierScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Soy el $name'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.go('/home');
-          },
+
+         title: const Text(
+          'Mis Estadísticas',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+      
       ),
+      
       body: const _BodyView(),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:fittracker/presentation/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fittracker/presentation/providers/auth_Provider.dart';
+import 'package:fittracker/presentation/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {

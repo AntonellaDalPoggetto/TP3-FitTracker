@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class UserOptions extends StatelessWidget {
-  static const String name = 'usar options';
+  static const String name = 'User Options';
 
   const UserOptions({super.key});
 
@@ -10,16 +10,45 @@ class UserOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Soy el $name'),
-         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.go('/home');
-          },
+        title: const Text(
+          'Opciones de Usuario',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+        elevation: 4.0,
       ),
-      body: const Center(
-        child: Text('Contenido del $name'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.lock),
+              title: const Text('Cambiar Contraseña'),
+              onTap: () {
+                context.push('/home'); //falta crear la pantalla de cambio de contraseña
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info),
+              title: const Text('Acerca de'),
+              onTap: () {
+                context.push('/about_screen');
+              },
+            ),
+            const Spacer(),
+            ElevatedButton(
+              onPressed: () {
+                // Cerrar sesión
+                // Implementar la lógica de cierre de sesión aquí
+                context.push('/login');
+              },
+              child: const Text('Cerrar Sesión'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

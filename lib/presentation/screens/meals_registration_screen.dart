@@ -17,7 +17,7 @@ class MealsRegistrationScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/home');
+            context.pop();
           },
         ),
       ),
@@ -69,26 +69,24 @@ class _BodyView extends ConsumerWidget {
         );
 
         _dateTimeController.text =
-            combinedDateTime.toString(); // Ajusta el formato si es necesario
+            combinedDateTime.toString();
       }
     }
   }
 
   void _validateAndSave(BuildContext context, WidgetRef ref) {
-    // Verificar que todos los campos estén completados
-    if (_mealNameController.text.isEmpty ||
-        _proteinController.text.isEmpty ||
-        _caloriesController.text.isEmpty ||
-        _carbsController.text.isEmpty ||
-        _dateTimeController.text.isEmpty) {
-      // Mostrar un mensaje de error
+    
+    if (_mealNameController.text.isEmpty || _proteinController.text.isEmpty ||
+        _caloriesController.text.isEmpty || _carbsController.text.isEmpty ||
+        _dateTimeController.text.isEmpty) 
+    {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Por favor, complete todos los campos.'),
         ),
       );
-    } else {
-      // Crear el objeto Meal
+    } 
+    else {      
       final Meal newMeal = Meal(
         name: _mealNameController.text,
         protein: double.parse(_proteinController.text),
@@ -96,25 +94,22 @@ class _BodyView extends ConsumerWidget {
         carbs: double.parse(_carbsController.text),
         dateTime: DateTime.parse(_dateTimeController.text),
       );
-
-      // Obtener las comidas actuales
-      final currentMeals = ref.read(mealListProvider);
-
-      // Agregar la nueva comida a la lista
-      final updatedMeals = [...currentMeals, newMeal];
-
-      // Ordenar las comidas por fecha (de más antiguo a más reciente)
-      updatedMeals.sort((a, b) => a.dateTime.compareTo(b.dateTime));
-
-      // Actualizar el estado del provider con la lista ordenada
-      ref.read(mealListProvider.notifier).state = updatedMeals;
-
-      // Mostrar un mensaje de éxito
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Comida agregada con éxito'),
-        ),
-      );
+      ref.read(mealListProvider.notifier).addMeal(newMeal).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Comida agregada con éxito'),
+          ),
+        );
+        context.go('/home');
+      }      
+      ).catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error al agregar la comida'),
+          ),
+        );
+        print("Error al agregar comida: $e");
+      });
     }
   }
 
@@ -169,7 +164,7 @@ class _BodyView extends ConsumerWidget {
             ),
             onTap: () => _selectDateTime(context),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -195,7 +190,7 @@ class _BodyView extends ConsumerWidget {
                   vertical: 20,
                 ),
               ),
-              child: const Text("SAVE"),
+              child: const Text("GUARDAR"),
             ),
           )
         ],
