@@ -32,6 +32,6 @@ flutter:
   uses-material-design: true
 
 # fonts:
-#     - family: Rubik
+#  - family: Rubik
 #       fonts:
 #         - asset: assets/fonts/Rubik-ExtraBold.ttf
