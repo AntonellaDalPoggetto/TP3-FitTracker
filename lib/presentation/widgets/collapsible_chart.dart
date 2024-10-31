@@ -1,8 +1,9 @@
+import 'package:fittracker/presentation/widgets/bar_chart_example.dart';
 import 'package:flutter/material.dart';
 
 class CollapsibleChartWidget extends StatefulWidget {
   final String name;
-  final Widget chart;
+  final SimpleBarChart chart;
   final String? variable;
   const CollapsibleChartWidget(
       {super.key,
@@ -28,12 +29,6 @@ class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
             Text("Gráfico de ${widget.variable}"),
             Row(
               children: [
-                FilledButton(onPressed: () {}, child: const Text("Editar")),
-                IconButton(
-                  icon: const Icon(Icons.star),
-                  onPressed: () {
-                  },
-                ),
                 IconButton(
                   icon: RotatedBox(
                     quarterTurns: _isExpanded ? 1 : 0,
