@@ -148,8 +148,8 @@ class _HomeState extends State<Home> {
                 ],
               ),
               SizedBox(
-                width: screenWidth * 0.7,
-                height: screenHeight * 0.25,
+                width: screenWidth * 0.8,
+                height: minHeight * 0.4,
                 child: Graph(screenWidth * 0.8),
               ),
             ],
