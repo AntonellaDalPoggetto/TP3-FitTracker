@@ -25,7 +25,7 @@ class UserOptions extends StatelessWidget {
               leading: const Icon(Icons.lock),
               title: const Text('Cambiar Contraseña'),
               onTap: () {
-                context.push('/home'); //falta crear la pantalla de cambio de contraseña
+                context.push('/home');       
               },
             ),
             ListTile(
@@ -40,7 +40,7 @@ class UserOptions extends StatelessWidget {
               onPressed: () {
                 // Cerrar sesión
                 // Implementar la lógica de cierre de sesión aquí
-                context.push('/login');
+                context.go('/login');
               },
               child: const Text('Cerrar Sesión'),
               style: ElevatedButton.styleFrom(

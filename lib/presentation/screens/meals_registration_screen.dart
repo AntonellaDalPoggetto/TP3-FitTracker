@@ -100,7 +100,7 @@ class _BodyView extends ConsumerWidget {
             content: Text('Comida agregada con éxito'),
           ),
         );
-        context.go('/home');
+        context.pop();
       }      
       ).catchError((e) {
         ScaffoldMessenger.of(context).showSnackBar(

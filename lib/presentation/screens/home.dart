@@ -1,16 +1,15 @@
 import 'package:fittracker/presentation/providers/chart_provider.dart';
 import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:fittracker/presentation/widgets/home_graph.dart';
-import 'package:fittracker/presentation/widgets/button_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends ConsumerStatefulWidget {
   static const String name = 'Home';
+
 
   const Home({super.key});
 
@@ -78,7 +77,6 @@ class _HomeState extends ConsumerState<Home> {
                     child: charts.length > 0
                         ? charts[0].chart
                         : Graph(screenWidth * 0.45),
-                    // child: ref.watch(chartsProvider)[0].chart,
                   ),
                   SizedBox(
                     width: screenWidth * 0.45,
@@ -106,7 +104,6 @@ class _HomeState extends ConsumerState<Home> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -187,9 +184,10 @@ class _HomeState extends ConsumerState<Home> {
   }
 }
 
-class _Header extends StatelessWidget {
+class _Header extends ConsumerWidget {
+  
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
@@ -207,8 +205,8 @@ class _Header extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  '¡Hola, Usuario!',
+                Text(
+                  '¡Hola,Usuario!',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -236,7 +234,6 @@ class _BodyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color colorGreen = const Color(0xFF34D399);
-    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Column(
@@ -290,7 +287,6 @@ class _BodyView extends StatelessWidget {
             child: Text(
               'Añadir Ejercicio',
               style: GoogleFonts.rubik(
-                // fontFamily: 'Roboto',
                 color: Color(0xFF34D399),
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
@@ -302,345 +298,3 @@ class _BodyView extends StatelessWidget {
     );
   }
 }
-
-// }
-
-// class _BodyView extends StatelessWidget {
-//   const _BodyView();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     Color colorGreen = const Color(0xFF34D399);
-//     double screenWidth = MediaQuery.of(context).size.width;
-//     double screenHeight = MediaQuery.of(context).size.height;
-
-//     return Column(
-//       children: [
-//         // LayoutBuilder(
-//         //   builder: (context, constraints) {
-//         //     double carouselHeight = screenHeight * 0.2;
-//         //     double buttonHeight = carouselHeight * 0.7;
-//         //     double buttonWidth = carouselHeight * 0.6;
-
-//         //     return CarouselSlider(
-//         //       options: CarouselOptions(
-//         //         height: carouselHeight,
-//         //         autoPlay: false,
-//         //         enlargeCenterPage: true,
-//         //         viewportFraction: 0.9,
-//         //         enableInfiniteScroll: false,
-//         //       ),
-//         //       items: _buildCarouselItems(
-//         //           buttonHeight, buttonWidth, colorGreen, context),
-//         //     );
-//         //   },
-//         // ),
-//         // Botón para Agregar Comida
-//         Container(
-//           width: double.infinity, // Hacer el botón largo
-//           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//           child: ElevatedButton(
-//             onPressed: () {
-//               //               context.push(/meals_registration);
-//             },
-//             child: const Text('Agregar Comida'),
-//             style: ElevatedButton.styleFrom(
-//               // color: colorGreen, // Usar color verde
-//               padding: const EdgeInsets.symmetric(vertical: 16), // Aumentar el padding vertical
-//             ),
-//           ),
-//         ),
-//         // Botón para Agregar Ejercicio
-//         Container(
-//           width: double.infinity, // Hacer el botón largo
-//           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//           child: ElevatedButton(
-//             onPressed: () {
-//               context.push('/exercise_registration');
-//             },
-//             child: const Text('Agregar Ejercicio'),
-//             style: ElevatedButton.styleFrom(
-//               // primary: colorGreen, // Usar color verde
-//               padding: const EdgeInsets.symmetric(vertical: 16), // Aumentar el padding vertical
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-// // class _BodyView extends StatelessWidget {
-// //   const _BodyView();
-
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     Color colorGreen = const Color(0xFF34D399);
-// //     double screenWidth = MediaQuery.of(context).size.width;
-// //     double screenHeight = MediaQuery.of(context).size.height;
-
-// //     return Column(
-// //       children: [
-// //         // LayoutBuilder(
-// //         //   builder: (context, constraints) {
-// //         //     double carouselHeight = screenHeight * 0.2;
-// //         //     double buttonHeight = carouselHeight * 0.7;
-// //         //     double buttonWidth = carouselHeight * 0.6;
-
-// //         //     return CarouselSlider(
-// //         //       options: CarouselOptions(
-// //         //         height: carouselHeight,
-// //         //         autoPlay: false,
-// //         //         enlargeCenterPage: true,
-// //         //         viewportFraction: 0.9,
-// //         //         enableInfiniteScroll: false,
-// //         //       ),
-// //         //       items: _buildCarouselItems(
-// //         //           buttonHeight, buttonWidth, colorGreen, context),
-// //         //     );
-// //         //   },
-// //         // ),
-// //         // Botón para Agregar Comida
-// //         Container(
-// //           width: double.infinity, // Hacer el botón largo
-// //           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-// //           child: ElevatedButton(
-// //             onPressed: () {
-// //               // Acción para agregar comida
-// //             },
-// //             child: const Text('Agregar Comida'),
-// //             style: ElevatedButton.styleFrom(
-// //               // color: colorGreen, // Usar color verde
-// //               padding: const EdgeInsets.symmetric(vertical: 16), // Aumentar el padding vertical
-// //             ),
-// //           ),
-// //         ),
-// //         // Botón para Agregar Ejercicio
-// //         Container(
-// //           width: double.infinity, // Hacer el botón largo
-// //           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-// //           child: ElevatedButton(
-// //             onPressed: () {
-// //               // Acción para agregar ejercicio
-// //             },
-// //             child: const Text('Agregar Ejercicio'),
-// //             style: ElevatedButton.styleFrom(
-// //               // primary: colorGreen, // Usar color verde
-// //               padding: const EdgeInsets.symmetric(vertical: 16), // Aumentar el padding vertical
-// //             ),
-// //           ),
-// //         ),
-// //       ],
-// //     );
-// //   }
-
-
-
-// //   List<Widget> _buildCarouselItems(double buttonHeight, double buttonWidth,
-// //       Color colorGreen, BuildContext context) {
-// //     return [
-// //       _buildButtonRow(buttonHeight, buttonWidth, colorGreen, context, [
-// //         ButtonInfo('Agregar Comida', '/meals_registration'),
-// //         ButtonInfo('Agregar Ejercicio', '/exercise_registration'),
-// //       ]),
-// //     ];
-// //   }
-
-// //   Row _buildButtonRow(double height, double width, Color colorGreen,
-// //       BuildContext context, List<ButtonInfo> buttonLabels) {
-// //     return Row(
-// //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-// //       children: buttonLabels.map((label) {
-// //         return _buildSingleButton(height, width, colorGreen, label, context);
-// //       }).toList(),
-// //     );
-// //   }
-
-// //   SizedBox _buildSingleButton(double height, double width, Color colorGreen,
-// //       ButtonInfo buttonInfo, BuildContext context) {
-// //     return SizedBox(
-// //       height: height,
-// //       width: width,
-// //       child: Stack(
-// //         alignment: Alignment.topCenter,
-// //         children: [
-// //           ElevatedButton(
-// //             onPressed: () {
-// //               context.push(buttonInfo.screen);
-// //             },
-// //             style: ElevatedButton.styleFrom(
-// //               shape: RoundedRectangleBorder(
-// //                 borderRadius: BorderRadius.circular(20),
-// //               ),
-// //               side: BorderSide(
-// //                 color: colorGreen,
-// //                 width: 2,
-// //               ),
-// //               backgroundColor: Colors.white,
-// //             ),
-// //             child: Column(
-// //               mainAxisAlignment: MainAxisAlignment.end,
-// //               children: [
-// //                 SizedBox(height: 8),
-// //                 Text(
-// //                   buttonInfo.name,
-// //                   textAlign: TextAlign.center,
-// //                 ),
-// //               ],
-// //             ),
-// //           ),
-// //           Positioned(
-// //             top: height * 0.1,
-// //             child: Container(
-// //               width: height * 0.5,
-// //               height: height * 0.5,
-// //               decoration: BoxDecoration(
-// //                 shape: BoxShape.circle,
-// //                 color: colorGreen,
-// //                 boxShadow: [
-// //                   BoxShadow(
-// //                     color: Colors.black.withOpacity(0.2),
-// //                     offset: Offset(0, 2),
-// //                     blurRadius: 4,
-// //                   ),
-// //                 ],
-// //               ),
-// //               child: Center(
-// //                 child: InkWell(
-// //                   onTap: () {
-// //                     context.push(buttonInfo.screen);
-// //                   },
-// //                   child: const Text(
-// //                     '+',
-// //                     style: TextStyle(
-// //                       fontSize: 34,
-// //                       fontWeight: FontWeight.bold,
-// //                       color: Colors.white,
-// //                     ),
-// //                   ),
-// //                 ),
-// //               ),
-// //             ),
-// //           ),
-// //         ],
-// //       ),
-// //     );
-// //   }
-
-// //   Widget _buildCircularIcon(Color colorGreen, BuildContext context,
-// //       dynamic content, VoidCallback onTap) {
-// //     return Container(
-// //       width: 40,
-// //       height: 40,
-// //       decoration: BoxDecoration(
-// //         shape: BoxShape.circle,
-// //         color: colorGreen,
-// //         boxShadow: [
-// //           BoxShadow(
-// //             color: Colors.black.withOpacity(0.2),
-// //             offset: Offset(0, 2),
-// //             blurRadius: 4,
-// //           ),
-// //         ],
-// //       ),
-// //       child: Center(
-// //         child: InkWell(
-// //           onTap: onTap,
-// //           child: content is String
-// //               ? Text(
-// //                   content,
-// //                   style: TextStyle(
-// //                     fontSize: 24,
-// //                     fontWeight: FontWeight.bold,
-// //                     color: Colors.white,
-// //                   ),
-// //                 )
-// //               : Icon(
-// //                   content,
-// //                   size: 24,
-// //                   color: Colors.white,
-// //                 ),
-// //         ),
-// //       ),
-// //     );
-// //   }
-
-// //   // List<Widget> _buildSecondaryCarousel(double screenHeight, double screenWidth,
-// //   //     Color colorGreen, BuildContext context) {
-// //   //   return [
-// //   //     _buildHistoryButtonRow(screenHeight, screenWidth, colorGreen, context),
-// //   //   ];
-// //   // }
-
-// //   // Row _buildHistoryButtonRow(double screenHeight, double screenWidth,
-// //   //     Color colorGreen, BuildContext context) {
-// //   //   return Row(
-// //   //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-// //   //     children: [
-// //   //       _buildProgressContainer(screenHeight, screenWidth),
-// //   //       _buildHistoryButton(screenHeight, screenWidth, colorGreen, context),
-// //   //     ],
-// //   //   );
-// //   // }
-
-// // //   SizedBox _buildHistoryButton(double screenHeight, double screenWidth,
-// // //       Color colorGreen, BuildContext context) {
-// // //     return SizedBox(
-// // //       height: screenHeight * 0.6,
-// // //       width: screenWidth * 0.4,
-// // //       child: ElevatedButton(
-// // //         onPressed: () {
-// // //           context.push('/exercises_list'); // Cambia la ruta según sea necesario
-// // //         },
-// // //         style: ElevatedButton.styleFrom(
-// // //           shape: RoundedRectangleBorder(
-// // //             borderRadius: BorderRadius.circular(20),
-// // //           ),
-// // //           side: BorderSide(
-// // //             color: colorGreen,
-// // //             width: 2,
-// // //           ),
-// // //           backgroundColor: Colors.white,
-// // //         ),
-// // //         child: Row(
-// // //           mainAxisAlignment: MainAxisAlignment.start,
-// // //           children: [
-// // //             const Icon(Icons.history, color: Colors.black),
-// // //             const SizedBox(width: 8),
-// // //             const Text(
-// // //               'Ver\nHistorial',
-// // //               style: TextStyle(color: Colors.black),
-// // //             ),
-// // //           ],
-// // //         ),
-// // //       ),
-// // //     );
-// // //   }
-
-// // //   SizedBox _buildProgressContainer(double screenHeight, double screenWidth) {
-// // //     return SizedBox(
-// // //       height: screenHeight * 0.4,
-// // //       width: screenWidth * 0.4,
-// // //       child: Container(
-// // //         padding: const EdgeInsets.symmetric(horizontal: 8),
-// // //         decoration: BoxDecoration(
-// // //           color: Colors.white,
-// // //           borderRadius: BorderRadius.circular(30.0),
-// // //           border: Border.all(
-// // //             color: const Color(0xFF34D399),
-// // //             width: 2,
-// // //           ),
-// // //         ),
-// // //         alignment: Alignment.center,
-// // //         child: const Text(
-// // //           '80% de Metas Alcanzadas',
-// // //           textAlign: TextAlign.center,
-// // //           style: TextStyle(
-// // //             color: Colors.black,
-// // //             fontSize: 16,
-// // //           ),
-// // //         ),
-// // //       ),
-// // //     );
-// // //   }
-// // }

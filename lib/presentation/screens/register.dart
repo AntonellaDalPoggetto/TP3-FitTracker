@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fittracker/presentation/providers/auth_Provider.dart';
+import 'package:fittracker/presentation/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class Register extends ConsumerStatefulWidget {
@@ -18,11 +18,10 @@ class _RegistrationView extends ConsumerState<Register> {
 
   void _register() async {
     final auth = ref.read(authProvider);
-    final user =
-        await auth.register(_emailController.text, _passwordController.text);
+    final user = await auth.register(_emailController.text, _passwordController.text, _userNameController.text);
 
     if (user != null) {
-      context.go('/home'); // Cambia a la ruta que desees
+      context.go('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error al registrarse')),
@@ -40,13 +39,13 @@ class _RegistrationView extends ConsumerState<Register> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-             const SizedBox(height: 20), // Espacio entre el AppBar y el título
+             const SizedBox(height: 20),
         Text(
           'Registrarse',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF34D399), // Color verde personalizado
+            color: Color(0xFF34D399),
           ),
         ),
         const SizedBox(height: 24),
@@ -97,7 +96,7 @@ class _RegistrationView extends ConsumerState<Register> {
             ElevatedButton(
               onPressed: _register,
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF34D399) // Establecer el color del botón
+                  backgroundColor: Color(0xFF34D399)
                   ),
               child: Text( style: TextStyle(
                     color: Colors.grey[700],

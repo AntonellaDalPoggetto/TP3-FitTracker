@@ -18,11 +18,6 @@ class _LoginView extends ConsumerState<LoginScreen> {
 
   _LoginView();
 
-  final snackBar = const SnackBar(
-    content: Text('email and password do not match. Please try again.'),
-    duration: Duration(seconds: 20),
-  );
-
   void _login() async {
     final auth = ref.read(authProvider);
     final user = await auth.login(_emailController.text, _passwordController.text);
@@ -78,7 +73,7 @@ class _LoginView extends ConsumerState<LoginScreen> {
             ElevatedButton(
               onPressed: _login,
                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF34D399) // Establecer el color del botón
+                  backgroundColor: Color(0xFF34D399)
                   ),
               child: const Text('Login'),
             ),
@@ -87,7 +82,7 @@ class _LoginView extends ConsumerState<LoginScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Register()), // Cambia esto por tu página de registro
+                MaterialPageRoute(builder: (context) => Register()),
               );
             },
             child: const Text(
