@@ -26,12 +26,9 @@ class UserFS {
       'email': email,
     };
   }
-
-  static UserFS fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) {
-    final data = snapshot.data();
+  
+  factory UserFS.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
     return UserFS(
       username: data?['username'] ?? '',
       email: data?['email'] ?? '',

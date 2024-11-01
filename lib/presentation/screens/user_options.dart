@@ -49,12 +49,12 @@ class _UserOptionsView extends ConsumerState<UserOptions> {
               onPressed: () async {
                   final auth = ref.read(authProvider);
                   await auth.logout();
-                context.go('/login');
+                  context.go('/login');
               },
-              child: const Text('Cerrar Sesión'),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
               ),
+              child: const Text('Cerrar Sesión'),
             ),
           ],
         ),

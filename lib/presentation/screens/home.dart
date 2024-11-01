@@ -1,4 +1,5 @@
 import 'package:fittracker/presentation/providers/chart_provider.dart';
+import 'package:fittracker/presentation/providers/user_Provider.dart';
 import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:fittracker/presentation/widgets/home_graph.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _HomeState extends ConsumerState<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        title: _Header(),
+        title: Header(),
       ),
       body: SlidingUpPanel(
         panel: Padding(
@@ -184,10 +185,19 @@ class _HomeState extends ConsumerState<Home> {
   }
 }
 
-class _Header extends ConsumerWidget {
-  
+//
+class Header extends ConsumerStatefulWidget {
+  const Header({super.key});
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _Header createState() => _Header();
+}
+
+class _Header extends ConsumerState<Header> {
+  @override
+  Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
+    final usurname = user != null ? user.username : "Usuario";
     return Container(
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
@@ -206,7 +216,7 @@ class _Header extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '¡Hola,Usuario!',
+                  '¡Hola, $usurname!',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

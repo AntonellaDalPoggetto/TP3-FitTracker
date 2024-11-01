@@ -8,10 +8,10 @@ class MainContainer extends StatefulWidget {
   const MainContainer({super.key, required this.child});
 
   @override
-  _MainContainerState createState() => _MainContainerState();
+  MainContainerState createState() => MainContainerState();
 }
 
-class _MainContainerState extends State<MainContainer> {
+class MainContainerState extends State<MainContainer> {
   int _selectedIndex = 0;
 
   static final List<String> routes = <String>[
@@ -60,7 +60,7 @@ class _MainContainerState extends State<MainContainer> {
             child: child,
           );
         },
-        child: widget.child, // Usa el widget actual de la ruta como hijo
+        child: widget.child,
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
