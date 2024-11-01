@@ -1,11 +1,20 @@
+import 'package:fittracker/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class UserOptions extends StatelessWidget {
+class UserOptions extends ConsumerStatefulWidget {
   static const String name = 'User Options';
 
   const UserOptions({super.key});
 
+  @override
+  _UserOptionsView createState() => _UserOptionsView();
+}
+
+class _UserOptionsView extends ConsumerState<UserOptions> {
+  _UserOptionsView();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,9 +46,9 @@ class UserOptions extends StatelessWidget {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {
-                // Cerrar sesión
-                // Implementar la lógica de cierre de sesión aquí
+              onPressed: () async {
+                  final auth = ref.read(authProvider);
+                  await auth.logout();
                 context.go('/login');
               },
               child: const Text('Cerrar Sesión'),

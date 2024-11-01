@@ -27,7 +27,7 @@ class AuthService {
           'email': email,
         });
       }
-      username = username;
+      currentUsername = username;
       return user;
       }
       on FirebaseAuthException catch (e) {
