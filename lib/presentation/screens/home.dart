@@ -1,12 +1,15 @@
+import 'package:fittracker/presentation/providers/chart_provider.dart';
+import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:fittracker/presentation/widgets/home_graph.dart';
 import 'package:fittracker/presentation/widgets/button_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
   static const String name = 'Home';
 
   const Home({super.key});
@@ -15,7 +18,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends ConsumerState<Home> {
   final int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -32,6 +35,7 @@ class _HomeState extends State<Home> {
     double screenHeight = MediaQuery.of(context).size.height;
     double minHeight = screenHeight * 0.60;
     double maxHeight = screenHeight * 0.88;
+    List<CollapsibleChartWidget> charts = ref.watch(chartsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -71,12 +75,17 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     width: screenWidth * 0.45,
                     height: screenHeight * 0.35,
-                    child: Graph(screenWidth * 0.45),
+                    child: charts.length > 0
+                        ? charts[0].chart
+                        : Graph(screenWidth * 0.45),
+                    // child: ref.watch(chartsProvider)[0].chart,
                   ),
                   SizedBox(
                     width: screenWidth * 0.45,
                     height: screenHeight * 0.35,
-                    child: Graph(screenWidth * 0.45),
+                    child: charts.length > 1
+                        ? charts[1].chart
+                        : Graph(screenWidth * 0.45),
                   ),
                 ],
               ),
@@ -84,7 +93,9 @@ class _HomeState extends State<Home> {
               SizedBox(
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.4,
-                child: Graph(screenWidth * 0.9),
+                child: charts.length > 2
+                    ? charts[2].chart
+                    : Graph(screenWidth * 0.9),
               ),
             ],
           ),
@@ -135,21 +146,27 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: screenWidth * 0.4,
-                    height: screenHeight * 0.25,
-                    child: Graph(screenWidth * 0.4),
+                    width: screenWidth * 0.45,
+                    height: screenHeight * 0.35,
+                    child: charts.length > 0
+                        ? charts[0].chart
+                        : Graph(screenWidth * 0.4),
                   ),
                   SizedBox(
-                    width: screenWidth * 0.4,
-                    height: screenHeight * 0.25,
-                    child: Graph(screenWidth * 0.4),
+                    width: screenWidth * 0.45,
+                    height: screenHeight * 0.35,
+                    child: charts.length > 1
+                        ? charts[1].chart
+                        : Graph(screenWidth * 0.4),
                   ),
                 ],
               ),
               SizedBox(
-                width: screenWidth * 0.8,
-                height: minHeight * 0.4,
-                child: Graph(screenWidth * 0.8),
+                width: screenWidth * 0.9,
+                height: screenHeight * 0.4,
+                child: charts.length > 2
+                    ? charts[2].chart
+                    : Graph(screenWidth * 0.8),
               ),
             ],
           ),
