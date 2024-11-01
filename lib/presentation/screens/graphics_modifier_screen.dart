@@ -4,8 +4,6 @@ import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fittracker/presentation/providers/exersice_list_provider.dart';
-import 'package:fittracker/presentation/entities/exercise.dart';
-
 
 class GraphicsModifierScreen extends StatelessWidget {
   static const String name = 'modificador de gráficos';
@@ -16,14 +14,11 @@ class GraphicsModifierScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
-         title: const Text(
+        title: const Text(
           'Mis Estadísticas',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-      
       ),
-      
       body: const _BodyView(),
     );
   }
@@ -38,23 +33,23 @@ class _BodyView extends ConsumerStatefulWidget {
 
 class _BodyViewState extends ConsumerState<_BodyView> {
   String _selectedOption = 'Comida';
-  String? _selectedFoodValue = "Proteínas";
-  String? _selectedExercise;
+  String _selectedValue = '';
+  //String? _selectedFoodValue = "Proteínas";
+  //String? _selectedExercise;
 
-  final List<String> _comidaOptions = ['Proteínas', 'Carbohidratos', 'Calorías'];
+  final List<String> _comidaOptions = [
+    'Proteínas',
+    'Carbohidratos',
+    'Calorías'
+  ];
 
   void _addChart() {
     try {
       String name = _selectedOption;
       String? variable;
+      variable = _selectedValue;
+      //arriba borre los if porque unifice el selected value
 
-      if (_selectedOption == 'Ejercicio' && _selectedExercise != null) {
-        variable = _selectedExercise;
-      } else {
-        variable = _selectedFoodValue;
-      }
-
-      // Añadir el gráfico al provider en lugar de a una lista local
       ref.read(chartsProvider.notifier).update((state) {
         return [
           ...state,
@@ -74,6 +69,15 @@ class _BodyViewState extends ConsumerState<_BodyView> {
 
   void _showOptionDialog(BuildContext context) {
     final exerciseList = ref.watch(exerciseListProvider);
+    List<String> exerciseNameList = exerciseList
+        .map((exercise) {
+          return exercise.name;
+        })
+        .toSet()
+        .toList();
+    List<String> optionsList =
+        _selectedOption == 'Comida' ? _comidaOptions : exerciseNameList;
+    _selectedValue = optionsList.first;
 
     showDialog(
       context: context,
@@ -92,8 +96,10 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     onChanged: (String? value) {
                       setState(() {
                         _selectedOption = value!;
-                        _selectedExercise = null;
-                        _selectedFoodValue = _comidaOptions.first;
+                        optionsList = _comidaOptions;
+                        if (optionsList.isNotEmpty) {
+                          _selectedValue = optionsList.first;
+                        }
                       });
                     },
                   ),
@@ -104,52 +110,28 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     onChanged: (String? value) {
                       setState(() {
                         _selectedOption = value!;
-                        _selectedFoodValue = null;
-                        if (exerciseList.isNotEmpty) {
-                          _selectedExercise = exerciseList.first.name;
+                        optionsList = exerciseNameList;
+                        if (optionsList.isNotEmpty) {
+                          _selectedValue = optionsList.first;
                         }
                       });
                     },
                   ),
                   const SizedBox(height: 20),
-                  if (_selectedOption == 'Comida')
-                    DropdownButton<String>(
-                      value: _selectedFoodValue,
-                      items: _comidaOptions.map((String option) {
-                        return DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedFoodValue = newValue!;
-                        });
-                      },
-                    ),
-                  if (_selectedOption == 'Ejercicio' &&
-                      exerciseList.isEmpty) ...[
-                    const Text(
-                        "No hay ejercicios cargados hasta el momento, agregue ejercicios e intente más tarde."),
-                    const SizedBox(height: 10),
-                  ] else if (_selectedOption == 'Ejercicio') ...[
-                    DropdownButton<String>(
-                      value: _selectedExercise,
-                      items: exerciseList
-                          .map((Exercise exercise) => exercise.name)
-                          .toSet()
-                          .map((String name) => DropdownMenuItem<String>(
-                                value: name,
-                                child: Text(name),
-                              ))
-                          .toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedExercise = newValue!;
-                        });
-                      },
-                    ),
-                  ],
+                  DropdownButton<String>(
+                    value: _selectedValue,
+                    items: optionsList.map((String option) {
+                      return DropdownMenuItem<String>(
+                        value: option,
+                        child: Text(option),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedValue = newValue!;
+                      });
+                    },
+                  )
                 ],
               ),
               actions: [
@@ -179,7 +161,7 @@ class _BodyViewState extends ConsumerState<_BodyView> {
 
   @override
   Widget build(BuildContext context) {
-    final charts = ref.watch(chartsProvider); // Obtenemos la lista de gráficos desde el provider
+    final charts = ref.watch(chartsProvider);
 
     return SingleChildScrollView(
       child: Column(
@@ -195,7 +177,7 @@ class _BodyViewState extends ConsumerState<_BodyView> {
             ),
           ),
           Column(
-            children: charts, // Mostramos los gráficos almacenados en el provider
+            children: charts,
           ),
         ],
       ),
