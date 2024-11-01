@@ -1,12 +1,14 @@
+import 'package:fittracker/presentation/providers/chart_provider.dart';
 import 'package:fittracker/presentation/widgets/home_graph.dart';
 import 'package:fittracker/presentation/widgets/button_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget  {
   static const String name = 'Home';
 
   const Home({super.key});
@@ -15,7 +17,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends ConsumerState<Home> {
   final int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -48,19 +50,19 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     width: screenWidth * 0.4,
                     height: screenHeight *0.25,
-                    child: const Graph(),
+                    child: ref.watch(chartsProvider)[0].chart,
                   ),
                   SizedBox(
                   width: screenWidth * 0.4,
                     height: screenHeight *0.25,
-                    child: const Graph(),
+                    child: ref.watch(chartsProvider)[1].chart,
                   ),
                 ],
               ),
               SizedBox(
                width: screenWidth * 0.4,
                     height: screenHeight *0.5,
-                child: const Graph(),
+                child: ref.watch(chartsProvider)[2].chart,
               ),
             ],
           ),
@@ -77,7 +79,7 @@ collapsed: Container(
               SizedBox(
                     width: screenWidth * 0.4,
                     height: screenHeight *0.25,
-                    child: const Graph(),
+                    child: ref.watch(chartsProvider)[0].chart,
                   ),
               SizedBox(height: 10),
               Center(child: Text("Desliza hacia arriba para ver más")),
