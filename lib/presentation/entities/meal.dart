@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Meal {
+  String userID;
   final String name;
   final double protein;
   final double calories;
@@ -9,6 +10,7 @@ class Meal {
 
   Meal({
     required this.name,
+    required this.userID,
     required this.protein,
     required this.calories,
     required this.carbs,
@@ -18,6 +20,7 @@ class Meal {
   Map<String, dynamic> toFirestore() {
     return {
       'name': name,
+      'userID': userID,
       'protein': protein,
       'calories': calories,
       'carbs': carbs,
@@ -33,6 +36,7 @@ class Meal {
 
     return Meal(
       name: data?['name'] ?? '',
+      userID: data?['userID'] ?? '',
       protein: (data?['protein']?? 0).toDouble(),
       calories: (data?['calories'] ?? 0).toDouble(),
       dateTime: (data?['dateTime'] as Timestamp).toDate(),

@@ -12,7 +12,7 @@ import 'package:fittracker/presentation/screens/user_options.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/login',
   routes: [
     GoRoute(
       path: '/home',

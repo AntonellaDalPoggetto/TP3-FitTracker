@@ -1,3 +1,4 @@
+import 'package:fittracker/presentation/providers/meal_list_provider.dart';
 import 'package:fittracker/presentation/providers/user_Provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,9 +11,9 @@ final authProvider = Provider<AuthService>((ref) => AuthService(ref));
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final Ref ref; // Guarda una referencia de ref para acceder a otros providers
+  final Ref ref;
 
-  AuthService(this.ref); // Acepta ref en el constructor
+  AuthService(this.ref);
 
   String currentUsername = "";
 
@@ -34,8 +35,7 @@ class AuthService {
           'email': email,
         });
         currentUsername = username;
-
-        // Actualiza el userProvider después de registrar
+        
         final userNotifier = ref.read(userProvider.notifier);
         await userNotifier.getCurrentUser();
       }
@@ -48,15 +48,13 @@ class AuthService {
 
   Future<User?> login(String email, String password) async {
     try {
-      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password);
+      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email,password: password);
       final user = userCredential.user;
-
-      // Actualiza el userProvider después de iniciar sesión
+      
       if (user != null) {
         final userNotifier = ref.read(userProvider.notifier);
         await userNotifier.getCurrentUser();
+        ref.read(mealListProvider.notifier).getAllMeals();  
       }
       return user;
     } catch (e) {
@@ -67,6 +65,7 @@ class AuthService {
 
   Future<void> logout() async {
     await _firebaseAuth.signOut();
+    ref.read(mealListProvider.notifier).clearState();    
   }
 
   User? get currentUser => _firebaseAuth.currentUser;

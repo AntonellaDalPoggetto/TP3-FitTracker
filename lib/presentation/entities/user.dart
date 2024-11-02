@@ -30,11 +30,11 @@ class UserFS {
   factory UserFS.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return UserFS(
-      username: data?['username'] ?? '',
-      email: data?['email'] ?? '',
-      password: data?['password'] ?? '',
-      lastLogin: (data?['lastLogin'] as Timestamp).toDate(),
-      userID: (data?['userID'] ?? ''),
+      username: data['username'] ?? '',
+      email: data['email'] ?? '',
+      password: data['password'] ?? '',
+      lastLogin: (data['lastLogin'] as Timestamp).toDate(),
+      userID: (data['userID'] ?? ''),
     );
   }
 }

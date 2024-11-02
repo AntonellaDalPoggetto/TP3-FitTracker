@@ -74,8 +74,7 @@ class _BodyView extends ConsumerWidget {
     }
   }
 
-  void _validateAndSave(BuildContext context, WidgetRef ref) {
-    
+  void _validateAndSave(BuildContext context, WidgetRef ref) {    
     if (_mealNameController.text.isEmpty || _proteinController.text.isEmpty ||
         _caloriesController.text.isEmpty || _carbsController.text.isEmpty ||
         _dateTimeController.text.isEmpty) 
@@ -89,6 +88,7 @@ class _BodyView extends ConsumerWidget {
     else {      
       final Meal newMeal = Meal(
         name: _mealNameController.text,
+        userID: "",
         protein: double.parse(_proteinController.text),
         calories: double.parse(_caloriesController.text),
         carbs: double.parse(_carbsController.text),
@@ -173,7 +173,7 @@ class _BodyView extends ConsumerWidget {
                 BoxShadow(
                   color: Colors.black.withOpacity(0.5),
                   offset: const Offset(
-                      1, 4), // Mover sombra "N" px a la derecha y "N" px abajo
+                      1, 4),
                   blurRadius: 4,
                 ),
               ],
