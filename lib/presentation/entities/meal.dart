@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Meal {
-  String userID;
+  String? userID;
+  String? mealID;
   final String name;
   final double protein;
   final double calories;
@@ -10,7 +11,8 @@ class Meal {
 
   Meal({
     required this.name,
-    required this.userID,
+    this.userID,
+    this.mealID,
     required this.protein,
     required this.calories,
     required this.carbs,
@@ -21,6 +23,7 @@ class Meal {
     return {
       'name': name,
       'userID': userID,
+      'mealID': mealID,
       'protein': protein,
       'calories': calories,
       'carbs': carbs,
@@ -37,6 +40,7 @@ class Meal {
     return Meal(
       name: data?['name'] ?? '',
       userID: data?['userID'] ?? '',
+      mealID: data?['mealID'] ?? '',
       protein: (data?['protein']?? 0).toDouble(),
       calories: (data?['calories'] ?? 0).toDouble(),
       dateTime: (data?['dateTime'] as Timestamp).toDate(),

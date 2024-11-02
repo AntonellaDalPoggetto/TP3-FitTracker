@@ -7,18 +7,28 @@ class MealListNotifier extends StateNotifier<List<Meal>> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthService _authService;
 
-  
-
   MealListNotifier(this._authService) : super([]);
 
-  Future<void> addMeal(Meal meal) async {      
+
+
+  Future<void> deleteMeal(String mealID) async {
+    try {
+      await _firestore.collection('Meal').doc(mealID).delete();
+      state = state.where((m) => m.mealID != mealID).toList();
+    } catch (e) {
+      print('Error al eliminar la comida: $e');
+    }
+  }
+
+  Future<void> addMeal(Meal meal) async {
     final currentUser = _authService.currentUser;
+    final doc = _firestore.collection('Meal').doc();
+
     if(currentUser != null){
       meal.userID = currentUser.uid;
     }
-
-    final doc = _firestore.collection('Meal').doc();
     try {
+      meal.mealID = doc.id;
       await doc.set(meal.toFirestore());
       state = [...state, meal];
     } 

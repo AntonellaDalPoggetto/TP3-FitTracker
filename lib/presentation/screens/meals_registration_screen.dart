@@ -88,7 +88,6 @@ class _BodyView extends ConsumerWidget {
     else {      
       final Meal newMeal = Meal(
         name: _mealNameController.text,
-        userID: "",
         protein: double.parse(_proteinController.text),
         calories: double.parse(_caloriesController.text),
         carbs: double.parse(_carbsController.text),
