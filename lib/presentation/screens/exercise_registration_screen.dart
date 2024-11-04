@@ -178,7 +178,7 @@ class _BodyView extends ConsumerWidget {
         weight: double.parse(_weightController.text),
         dateTime: DateTime.parse(_dateTimeController.text),
       );
-
+      //el siguiente codigo debe reemplazarse con el de abajo cuando se agregue el metodo addExercise al provider
       final currentExercises = ref.read(exerciseListProvider);
       final updatedExercises = [...currentExercises, newExersice];
       updatedExercises.sort((a, b) => a.dateTime.compareTo(b.dateTime));
@@ -191,5 +191,24 @@ class _BodyView extends ConsumerWidget {
         ),
       );
     }
-  }
+   }
+  // El codigo del agregar ejercicio deberia ser el siguiente
+  //     ref.read(exerciseListProvider.notifier).addExercise(newExersice).then((_) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('Ejercicio agregado con éxito'),
+  //         ),
+  //       );
+  //       context.pop();
+  //     }      
+  //     ).catchError((e) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('Error al agregar Ejercicio'),
+  //         ),
+  //       );
+  //       print("Error al agregar Ejercicio: $e");
+  //     });
+  //   }
+  // }  
 }

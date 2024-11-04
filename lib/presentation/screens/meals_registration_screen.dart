@@ -74,8 +74,7 @@ class _BodyView extends ConsumerWidget {
     }
   }
 
-  void _validateAndSave(BuildContext context, WidgetRef ref) {
-    
+  void _validateAndSave(BuildContext context, WidgetRef ref) {    
     if (_mealNameController.text.isEmpty || _proteinController.text.isEmpty ||
         _caloriesController.text.isEmpty || _carbsController.text.isEmpty ||
         _dateTimeController.text.isEmpty) 
@@ -100,7 +99,7 @@ class _BodyView extends ConsumerWidget {
             content: Text('Comida agregada con éxito'),
           ),
         );
-        context.go('/home');
+        context.pop();
       }      
       ).catchError((e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -173,7 +172,7 @@ class _BodyView extends ConsumerWidget {
                 BoxShadow(
                   color: Colors.black.withOpacity(0.5),
                   offset: const Offset(
-                      1, 4), // Mover sombra "N" px a la derecha y "N" px abajo
+                      1, 4),
                   blurRadius: 4,
                 ),
               ],

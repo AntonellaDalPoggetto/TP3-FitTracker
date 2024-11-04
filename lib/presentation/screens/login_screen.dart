@@ -1,3 +1,4 @@
+import 'package:fittracker/presentation/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fittracker/presentation/providers/auth_provider.dart';
@@ -16,11 +17,6 @@ class _LoginView extends ConsumerState<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   _LoginView();
-
-  final snackBar = const SnackBar(
-    content: Text('email and password do not match. Please try again.'),
-    duration: Duration(seconds: 20),
-  );
 
   void _login() async {
     final auth = ref.read(authProvider);
@@ -76,8 +72,24 @@ class _LoginView extends ConsumerState<LoginScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _login,
+               style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF34D399)
+                  ),
               child: const Text('Login'),
             ),
+             const SizedBox(height: 16),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Register()),
+              );
+            },
+            child: const Text(
+              '¿No tienes una cuenta? Regístrate',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:fittracker/presentation/widgets/confirm_delete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fittracker/presentation/providers/meal_list_provider.dart';
@@ -27,7 +28,7 @@ class MealsListScreen extends StatelessWidget {
 }
 
 class _BodyView extends ConsumerStatefulWidget {
-  const _BodyView({super.key});
+  const _BodyView();
 
   @override
   _BodyViewState createState() => _BodyViewState();
@@ -88,13 +89,13 @@ class _BodyViewState extends ConsumerState<_BodyView> {
   }
 }
 
-class MealCard extends StatelessWidget {
+class MealCard extends ConsumerWidget {
   final Meal meal;
 
   const MealCard({super.key, required this.meal});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -111,7 +112,29 @@ class MealCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Consumido el ${meal.dateTime.toLocal()}'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Consumido el ${meal.dateTime.toLocal()}'),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ConfirmDeleteDialog(
+                          title: 'Confirmar eliminación',
+                          content: '¿Estás seguro de que deseas eliminar esta comida?',
+                          onConfirm: () {
+                            ref.read(mealListProvider.notifier).deleteMeal(meal.mealID!);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.delete, color: Colors.grey),
+                ),
+              ],
+            ),
           ),
         ],
       ),

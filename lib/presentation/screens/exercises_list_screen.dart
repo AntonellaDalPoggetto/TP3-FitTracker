@@ -28,7 +28,7 @@ class ExercisesListScreen extends StatelessWidget {
 }
 
 class _BodyView extends ConsumerStatefulWidget {
-  const _BodyView({super.key});
+  const _BodyView();
 
   @override
   _BodyViewState createState() => _BodyViewState();
