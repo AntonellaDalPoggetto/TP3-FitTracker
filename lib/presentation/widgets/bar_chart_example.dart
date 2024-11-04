@@ -20,16 +20,16 @@ class _SimpleBarChartState extends ConsumerState<SimpleBarChart> {
 
   List<BarChartGroupData> generateGraphData(List<dynamic> data) {
     List<BarChartGroupData> graphData = [];
-    bool expression = data is List<Meal>;
+    bool isMealData = data is List<Meal>;
     double maxNumber = 0;
     double numberToShow = 0;
 
-    if (expression) {
+    if (isMealData) {
       List<Meal> meals = data;
       if (meals.length > 7) {
         meals = meals.sublist(meals.length - 7);
       }
-      meals.map((currentMeal) {
+      for (var currentMeal in meals) {
         switch (widget.variable) {
           case "Proteínas":
             numberToShow = currentMeal.protein;
@@ -41,50 +41,60 @@ class _SimpleBarChartState extends ConsumerState<SimpleBarChart> {
             numberToShow = currentMeal.calories;
             break;
           default:
-            return;
+            return [];
         }
-        if (numberToShow > maxNumber) {
-          maxNumber = numberToShow;
-        }
-        graphData.add(BarChartGroupData(x: currentMeal.dateTime.millisecondsSinceEpoch, barRods: [
-          BarChartRodData(toY: numberToShow, color: Colors.red, width: 5)
-        ]));
-      }).toList();
+        maxNumber = maxNumber < numberToShow ? numberToShow : maxNumber;
+        graphData.add(
+          BarChartGroupData(
+            x: currentMeal.dateTime.millisecondsSinceEpoch,
+            barRods: [
+              BarChartRodData(
+                toY: numberToShow,
+                color: Color(0xFF34D399),
+                width: 20,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+            ],
+          ),
+        );
+      }
     } else {
       List<Exercise> exercises = data as List<Exercise>;
       exercises = exercises.where((ex) => ex.name == widget.variable).toList();
       if (exercises.length > 7) {
         exercises = exercises.sublist(exercises.length - 7);
       }
-      exercises.map((currentExercise) {
-        maxNumber = currentExercise.reps.toDouble();
-        if (maxNumber < currentExercise.sets) {
-          maxNumber = currentExercise.sets.toDouble();
-        } else if (maxNumber < currentExercise.weight) {
-          maxNumber = currentExercise.weight;
-        }
-        graphData.add(BarChartGroupData(
+      for (var currentExercise in exercises) {
+        double sets = currentExercise.sets.toDouble();
+        double weight = currentExercise.weight;
+        double reps = currentExercise.reps.toDouble();
+        maxNumber = [sets, weight, reps].reduce((a, b) => a > b ? a : b);
+        graphData.add(
+          BarChartGroupData(
             x: currentExercise.dateTime.millisecondsSinceEpoch,
             barRods: [
-              BarChartRodData(toY: currentExercise.sets.toDouble(), color: Colors.red, width: 5),
-              BarChartRodData(toY: currentExercise.weight, color: Colors.blue, width: 5),
-              BarChartRodData(toY: currentExercise.reps.toDouble(), color: Colors.green, width: 5)
-            ]));
-      }).toList();
-    }
-
-    switch (widget.variable) {
-      case "Proteínas":
-        maxYValue = 25;
-        break;
-      case "Carbohidratos":
-        maxYValue = 100;
-        break;
-      case "Calorías":
-        maxYValue = 840;
-        break;
-      default:
-        maxYValue = 70;
+              BarChartRodData(
+                toY: sets,
+                color: Colors.deepPurple,
+                width: 5,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              BarChartRodData(
+                toY: weight,
+                color: Color(0xFF34D399),
+                width: 5,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              BarChartRodData(
+                toY: reps,
+                color: Colors.green[900],
+                width: 5,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+            ],
+          ),
+        );
+      }
     }
 
     if (maxYValue < maxNumber) {
@@ -96,11 +106,9 @@ class _SimpleBarChartState extends ConsumerState<SimpleBarChart> {
 
   @override
   Widget build(BuildContext context) {
-    // Accediendo a los providers para meals y exercises
     final mealData = ref.watch(mealListProvider);
     final exerciseData = ref.watch(exerciseListProvider);
 
-    // Determina si los datos corresponden a Meal o Exercise según la variable
     List<dynamic> dataToShow;
     if (["Proteínas", "Carbohidratos", "Calorías"].contains(widget.variable)) {
       dataToShow = mealData;
@@ -113,37 +121,58 @@ class _SimpleBarChartState extends ConsumerState<SimpleBarChart> {
         padding: const EdgeInsets.all(16.0),
         child: BarChart(
           BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              barGroups: generateGraphData(dataToShow),
-              maxY: maxYValue,
-              barTouchData: BarTouchData(enabled: true),
-              borderData: FlBorderData(show: false),
-              titlesData: FlTitlesData(
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      DateTime date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-                      String formattedString = '${date.day}/${date.month} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
-                      return SideTitleWidget(
-                        axisSide: meta.axisSide,
-                        space: 10.0,
-                        angle: 45,
-                        child: Text(
-                          formattedString,
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                      );
-                    },
+            alignment: BarChartAlignment.spaceAround,
+            barGroups: generateGraphData(dataToShow),
+            maxY: maxYValue,
+            barTouchData: BarTouchData(enabled: true),
+            borderData: FlBorderData(show: false),
+            gridData: FlGridData(
+              show: true,
+              drawHorizontalLine: true,
+              drawVerticalLine: false,
+              getDrawingHorizontalLine: (value) => FlLine(
+                color: Colors.grey.shade300,
+                strokeWidth: 1,
+              ),
+            ),
+
+            titlesData: FlTitlesData(
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: maxYValue / 5, // Espaciado entre los valores del eje Y
+                  reservedSize: 28,
+                  getTitlesWidget: (value, meta) => Text(
+                    value.toInt().toString(),
+                    style: const TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                 ),
-                rightTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
+              ),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (value, meta) {
+                    DateTime date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                    String formattedString = '${date.day}/${date.month}';
+                    return SideTitleWidget(
+                      axisSide: meta.axisSide,
+                      space: 10.0,
+                      child: Text(
+                        formattedString,
+                        style: const TextStyle(fontSize: 10),
+                      ),
+                    );
+                  },
                 ),
-                topTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-              )),
+              ),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+            ),
+          ),
         ),
       ),
     );

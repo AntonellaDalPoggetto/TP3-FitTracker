@@ -53,14 +53,16 @@ class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
                   widget.name == "Comida"
                       ? Text(
                           widget.variable!,
-                          style: const TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Color(0xFF34D399)),
                         )
-                      : const Column(
+                      : Row(
                           children: [
                             Text("Repeticiones",
-                                style: TextStyle(color: Colors.green)),
-                            Text("Series", style: TextStyle(color: Colors.red)),
-                            Text("Peso", style: TextStyle(color: Colors.blue))
+                                style: TextStyle(color: Colors.green[900])),
+                            SizedBox(width: 20),
+                            const Text("Series", style: TextStyle(color: Colors.deepPurple)),
+                            SizedBox(width: 20),
+                            const Text("Peso", style: TextStyle(color: Color(0xFF34D399)))
                           ],
                         )
                 ],

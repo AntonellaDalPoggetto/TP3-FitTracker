@@ -34,8 +34,6 @@ class _BodyView extends ConsumerStatefulWidget {
 class _BodyViewState extends ConsumerState<_BodyView> {
   String _selectedOption = 'Comida';
   String _selectedValue = '';
-  //String? _selectedFoodValue = "Proteínas";
-  //String? _selectedExercise;
 
   final List<String> _comidaOptions = [
     'Proteínas',
