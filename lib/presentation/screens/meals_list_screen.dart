@@ -13,12 +13,10 @@ class MealsListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
-         title: const Text(
+        title: const Text(
           'Historial de Comidas',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-      
       ),
       body: const Center(
         child: _BodyView(),
@@ -105,17 +103,21 @@ class MealCard extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(meal.name),
-            Text("${meal.calories} kcal"),
+            Text("Proteínas: ${meal.protein}g"),
           ],
         ),
-        subtitle: Text('Proteínas: ${meal.protein}g, Carbohidratos: ${meal.carbs}g, Calorias: ${meal.calories}g'),
+        subtitle: Text(
+            '${meal.dateTime.day.toString()}/${meal.dateTime.month.toString()}/${meal.dateTime.year.toString()}'),
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Consumido el ${meal.dateTime.toLocal()}'),
+                Text("Proteínas: ${meal.protein}g"),
+                Text("Carbohidratos: ${meal.carbs}g"),
+                Text("Calorías: ${meal.calories}kcal"),
+                Text("Consumido el: ${meal.dateTime.day.toString()}/${meal.dateTime.month.toString()}/${meal.dateTime.year.toString()} a las ${meal.dateTime.hour.toString()}:${meal.dateTime.minute.toString()}"),
                 IconButton(
                   onPressed: () {
                     showDialog(
@@ -123,15 +125,18 @@ class MealCard extends ConsumerWidget {
                       builder: (BuildContext context) {
                         return ConfirmDeleteDialog(
                           title: 'Confirmar eliminación',
-                          content: '¿Estás seguro de que deseas eliminar esta comida?',
+                          content:
+                              '¿Estás seguro de que deseas eliminar esta comida?',
                           onConfirm: () {
-                            ref.read(mealListProvider.notifier).deleteMeal(meal.mealID!);
+                            ref
+                                .read(mealListProvider.notifier)
+                                .deleteMeal(meal.mealID!);
                           },
                         );
                       },
                     );
                   },
-                  icon: const Icon(Icons.delete, color: Colors.grey),
+                  icon: const Icon(Icons.delete, color: Colors.red),
                 ),
               ],
             ),

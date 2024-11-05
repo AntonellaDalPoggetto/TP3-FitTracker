@@ -1,82 +1,83 @@
 import 'package:fittracker/presentation/entities/exercise.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fittracker/presentation/providers/auth_provider.dart';
 
-class ExerciseListNotifier extends StateNotifier<List<Exercise>>{
-  final List<Exercise> allExercises;
-  ExerciseListNotifier(this.allExercises) : super(allExercises);
+class ExerciseListNotifier extends StateNotifier<List<Exercise>> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthService _authService;
+
+  ExerciseListNotifier(this._authService) : super([]);
+
+  Future<void> deleteExercise(String exerciseID) async {
+    try {
+      await _firestore.collection('Exercise').doc(exerciseID).delete();
+      state = state.where((e) => e.exerciseID != exerciseID).toList();
+      _sortExercisesByDate();
+    } catch (e) {
+      print('Error al eliminar la comida: $e');
+    }
+  }
+
+  Future<void> addExercise(Exercise ex) async {
+    final currentUser = _authService.currentUser;
+    final doc = _firestore.collection('Exercise').doc();
+
+    if (currentUser != null) {
+      ex.userID = currentUser.uid;
+    }
+    try {
+      ex.exerciseID = doc.id;
+      await doc.set(ex.toFirestore());
+      state = [...state, ex];
+      _sortExercisesByDate();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void filterByName(String query) {
     if (query.isEmpty) {
-      state = allExercises;
+      getAllExercises();
     } else {
-      state = allExercises
+      state = state
           .where((exercise) => exercise.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
+      _sortExercisesByDate();
     }
+  }
+
+  Future<void> getAllExercises() async {
+    final currentUser = _authService.currentUser;
+
+    if (currentUser != null) {
+      final docs = _firestore
+          .collection('Exercise')
+          .where('userID', isEqualTo: currentUser.uid)
+          .withConverter(
+              fromFirestore: Exercise.fromFirestore,
+              toFirestore: (Exercise exercise, _) => exercise.toFirestore());
+
+      final exercises = await docs.get();
+      state = exercises.docs.map((d) => d.data()).toList();
+      _sortExercisesByDate();
+    }
+  }
+
+  void _sortExercisesByDate() {
+    state = [...state]..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+  }
+
+  void clearState() {
+    state = [];
   }
 }
 
-final exerciseListProvider = StateNotifierProvider<ExerciseListNotifier, List<Exercise>>((ref) {
-  return ExerciseListNotifier([
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 20, dateTime: DateTime.now()),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 30, dateTime: DateTime.now()),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now()),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 20, dateTime: DateTime.now().add(const Duration(days: 1))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 35, dateTime: DateTime.now().add(const Duration(days: 1))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 1))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 25, dateTime: DateTime.now().add(const Duration(days: 3))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 35, dateTime: DateTime.now().add(const Duration(days: 3))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 3))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 25, dateTime: DateTime.now().add(const Duration(days: 4))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 40, dateTime: DateTime.now().add(const Duration(days: 4))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 4))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 30, dateTime: DateTime.now().add(const Duration(days: 5))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 45, dateTime: DateTime.now().add(const Duration(days: 5))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 5))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 30, dateTime: DateTime.now().add(const Duration(days: 6))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 50, dateTime: DateTime.now().add(const Duration(days: 6))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 6))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 35, dateTime: DateTime.now().add(const Duration(days: 7))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 60, dateTime: DateTime.now().add(const Duration(days: 7))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 7))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 35, dateTime: DateTime.now().add(const Duration(days: 8))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 60, dateTime: DateTime.now().add(const Duration(days: 8))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 8))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 40, dateTime: DateTime.now().add(const Duration(days: 9))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 60, dateTime: DateTime.now().add(const Duration(days: 9))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 9))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 40, dateTime: DateTime.now().add(const Duration(days: 10))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 65, dateTime: DateTime.now().add(const Duration(days: 10))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 10))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 45, dateTime: DateTime.now().add(const Duration(days: 11))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 65, dateTime: DateTime.now().add(const Duration(days: 11))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 11))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 45, dateTime: DateTime.now().add(const Duration(days: 12))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 65, dateTime: DateTime.now().add(const Duration(days: 12))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 60, dateTime: DateTime.now().add(const Duration(days: 12))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 50, dateTime: DateTime.now().add(const Duration(days: 13))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 65, dateTime: DateTime.now().add(const Duration(days: 13))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 65, dateTime: DateTime.now().add(const Duration(days: 13))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 50, dateTime: DateTime.now().add(const Duration(days: 14))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 65, dateTime: DateTime.now().add(const Duration(days: 14))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 65, dateTime: DateTime.now().add(const Duration(days: 14))),
-    
-    Exercise(name: "Press de banca", sets: 3, reps: 5, weight: 50, dateTime: DateTime.now().add(const Duration(days: 15))),
-    Exercise(name: "Sentadilla", sets: 3, reps: 8, weight: 70, dateTime: DateTime.now().add(const Duration(days: 15))),
-    Exercise(name: "Dominadas", sets: 3, reps: 10, weight: 65, dateTime: DateTime.now().add(const Duration(days: 15))),
-    
-  ]);
+final exerciseListProvider =
+    StateNotifierProvider<ExerciseListNotifier, List<Exercise>>((ref) {
+  final authService = ref.read(authProvider);
+  final notifier = ExerciseListNotifier(authService);
+  notifier.getAllExercises();
+  return notifier;
 });

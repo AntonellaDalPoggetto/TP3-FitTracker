@@ -46,7 +46,6 @@ class _BodyViewState extends ConsumerState<_BodyView> {
       String name = _selectedOption;
       String? variable;
       variable = _selectedValue;
-      //arriba borre los if porque unifice el selected value
 
       ref.read(chartsProvider.notifier).update((state) {
         return [
@@ -68,9 +67,7 @@ class _BodyViewState extends ConsumerState<_BodyView> {
   void _showOptionDialog(BuildContext context) {
     final exerciseList = ref.watch(exerciseListProvider);
     List<String> exerciseNameList = exerciseList
-        .map((exercise) {
-          return exercise.name;
-        })
+        .map((exercise) => exercise.name.trim().toLowerCase())
         .toSet()
         .toList();
     List<String> optionsList =
@@ -116,20 +113,25 @@ class _BodyViewState extends ConsumerState<_BodyView> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  DropdownButton<String>(
-                    value: _selectedValue,
-                    items: optionsList.map((String option) {
-                      return DropdownMenuItem<String>(
-                        value: option,
-                        child: Text(option),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedValue = newValue!;
-                      });
-                    },
-                  )
+                  if (_selectedOption == "Ejercicio" &&
+                      exerciseNameList.isEmpty)
+                    Text(
+                        "Todavía no hay ejercicios agregados, agrega uno nuevo para crear gráficos de ejercicios")
+                  else
+                    DropdownButton<String>(
+                      value: _selectedValue,
+                      items: optionsList.map((String option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedValue = newValue!;
+                        });
+                      },
+                    )
                 ],
               ),
               actions: [

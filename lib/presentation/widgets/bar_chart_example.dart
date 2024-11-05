@@ -106,8 +106,8 @@ class _SimpleBarChartState extends ConsumerState<SimpleBarChart> {
 
   @override
   Widget build(BuildContext context) {
-    final mealData = ref.watch(mealListProvider);
-    final exerciseData = ref.watch(exerciseListProvider);
+    final mealData = ref.watch(mealListProvider).reversed.toList();
+    final exerciseData = ref.watch(exerciseListProvider).reversed.toList();
 
     List<dynamic> dataToShow;
     if (["Proteínas", "Carbohidratos", "Calorías"].contains(widget.variable)) {

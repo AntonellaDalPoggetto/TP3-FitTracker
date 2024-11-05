@@ -1,4 +1,5 @@
 import 'package:fittracker/presentation/providers/exersice_list_provider.dart';
+import 'package:fittracker/presentation/widgets/confirm_delete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fittracker/presentation/entities/exercise.dart';
@@ -11,14 +12,11 @@ class ExercisesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
-
-         title: const Text(
+        title: const Text(
           'Historial de ejercicios',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-      
       ),
       body: const Center(
         child: _BodyView(),
@@ -52,53 +50,53 @@ class _BodyViewState extends ConsumerState<_BodyView> {
 
   @override
   Widget build(BuildContext context) {
-    final exerciseList = ref.watch(exerciseListProvider);
+    final List<Exercise> exerciseList = ref.watch(exerciseListProvider);
 
-     return Padding(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child:  Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Tus ejercicios: ",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 8),
-        TextFormField(
-          controller: _controller,
-          decoration: InputDecoration(
-            labelText: 'Nombre ejercicio',
-            border: OutlineInputBorder(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Tus ejercicios: ",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          onChanged: (value) {
-            // Actualizamos la lista de ejercicios filtrada cada vez que cambia el texto
-            ref.read(exerciseListProvider.notifier).filterByName(value);
-          },
-        ),
-        SizedBox(height: 16),
-        Expanded(
-          child: ListView.builder(
-            itemCount: exerciseList.length,
-            itemBuilder: (context, index) {
-              // Creamos una tarjeta por cada ejercicio
-              final exercise = exerciseList[index];
-              return ExerciseCard(exercise: exercise);
+          SizedBox(height: 8),
+          TextFormField(
+            controller: _controller,
+            decoration: InputDecoration(
+              labelText: 'Nombre ejercicio',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) {
+              // Actualizamos la lista de ejercicios filtrada cada vez que cambia el texto
+              ref.read(exerciseListProvider.notifier).filterByName(value);
             },
           ),
-        ),
-      ],
-    ),
-     );
+          SizedBox(height: 16),
+          Expanded(
+            child: ListView.builder(
+              itemCount: exerciseList.length,
+              itemBuilder: (context, index) {
+                // Creamos una tarjeta por cada ejercicio
+                final exercise = exerciseList[index];
+                return ExerciseCard(exercise: exercise);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
-class ExerciseCard extends StatelessWidget {
+class ExerciseCard extends ConsumerWidget {
   final Exercise exercise; // Recibe un objeto Exercise
 
   const ExerciseCard({super.key, required this.exercise});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     return Card(
       elevation: 2,
       margin: EdgeInsets.symmetric(vertical: 8),
@@ -107,15 +105,44 @@ class ExerciseCard extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(exercise.name), // Muestra el nombre del ejercicio
-            Text("${exercise.sets} series de ${exercise.reps} reps"), // Muestra sets y reps
+            Text(exercise.name), 
+            Text("${exercise.sets}x${exercise.reps} Reps")
           ],
         ),
-        subtitle: Text('Peso: ${exercise.weight} kg'),
+        subtitle: Text(
+            '${exercise.dateTime.day.toString()}/${exercise.dateTime.month.toString()}/${exercise.dateTime.year.toString()}'),
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Realizado el ${exercise.dateTime.toLocal()}'), // Muestra la fecha del ejercicio
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Series: ${exercise.sets}'),
+                Text('Repeticiones: ${exercise.reps}'),
+                Text('Peso levantado: ${exercise.weight}Kg'),
+                Text("Realizado el ${exercise.dateTime.day.toString()}/${exercise.dateTime.month.toString()}/${exercise.dateTime.year} a las ${exercise.dateTime.hour.toString()}:${exercise.dateTime.minute.toString()}"),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ConfirmDeleteDialog(
+                          title: 'Confirmar eliminación',
+                          content:
+                              '¿Estás seguro de que deseas eliminar esta comida?',
+                          onConfirm: () {
+                            ref
+                                .read(exerciseListProvider.notifier)
+                                .deleteExercise(exercise.exerciseID!);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                ),
+              ],
+            ), // Muestra la fecha del ejercicio
           ),
         ],
       ),

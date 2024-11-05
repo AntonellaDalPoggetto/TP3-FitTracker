@@ -68,8 +68,7 @@ class _BodyView extends ConsumerWidget {
           selectedTime.minute,
         );
 
-        _dateTimeController.text =
-            combinedDateTime.toString();
+        _dateTimeController.text = combinedDateTime.toString();
       }
     }
   }
@@ -164,10 +163,13 @@ class _BodyView extends ConsumerWidget {
         _setsController.text.isEmpty ||
         _repsController.text.isEmpty ||
         _weightController.text.isEmpty ||
-        _dateTimeController.text.isEmpty) {
+        _dateTimeController.text.isEmpty ||
+        int.tryParse(_setsController.text) == null ||
+        int.tryParse(_repsController.text) == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Por favor, complete todos los campos.'),
+          content: Text(
+              'Por favor, complete todos los campos y asegúrese de que los datos ingresados sean correctos.'),
         ),
       );
     } else {
@@ -179,36 +181,24 @@ class _BodyView extends ConsumerWidget {
         dateTime: DateTime.parse(_dateTimeController.text),
       );
       //el siguiente codigo debe reemplazarse con el de abajo cuando se agregue el metodo addExercise al provider
-      final currentExercises = ref.read(exerciseListProvider);
-      final updatedExercises = [...currentExercises, newExersice];
-      updatedExercises.sort((a, b) => a.dateTime.compareTo(b.dateTime));
-
-      ref.read(exerciseListProvider.notifier).state = updatedExercises;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Ejercicio agregado con éxito'),
-        ),
-      );
+      ref
+          .read(exerciseListProvider.notifier)
+          .addExercise(newExersice)
+          .then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Ejercicio agregado con éxito'),
+          ),
+        );
+        context.pop();
+      }).catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error al agregar Ejercicio'),
+          ),
+        );
+        print("Error al agregar Ejercicio: $e");
+      });
     }
-   }
-  // El codigo del agregar ejercicio deberia ser el siguiente
-  //     ref.read(exerciseListProvider.notifier).addExercise(newExersice).then((_) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Ejercicio agregado con éxito'),
-  //         ),
-  //       );
-  //       context.pop();
-  //     }      
-  //     ).catchError((e) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Error al agregar Ejercicio'),
-  //         ),
-  //       );
-  //       print("Error al agregar Ejercicio: $e");
-  //     });
-  //   }
-  // }  
+  }
 }

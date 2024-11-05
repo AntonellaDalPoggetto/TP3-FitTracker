@@ -1,3 +1,4 @@
+import 'package:fittracker/presentation/providers/exersice_list_provider.dart';
 import 'package:fittracker/presentation/providers/meal_list_provider.dart';
 import 'package:fittracker/presentation/providers/user_Provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,6 +56,7 @@ class AuthService {
         final userNotifier = ref.read(userProvider.notifier);
         await userNotifier.getCurrentUser();
         ref.read(mealListProvider.notifier).getAllMeals();  
+        ref.read(exerciseListProvider.notifier).getAllExercises();
       }
       return user;
     } catch (e) {
@@ -66,6 +68,7 @@ class AuthService {
   Future<void> logout() async {
     await _firebaseAuth.signOut();
     ref.read(mealListProvider.notifier).clearState();    
+    ref.read(exerciseListProvider.notifier).clearState();    
   }
 
   User? get currentUser => _firebaseAuth.currentUser;
