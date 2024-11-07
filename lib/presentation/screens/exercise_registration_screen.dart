@@ -182,7 +182,6 @@ class _BodyView extends ConsumerWidget {
         weight: double.parse(_weightController.text),
         dateTime: DateTime.parse(_dateTimeController.text),
       );
-      //el siguiente codigo debe reemplazarse con el de abajo cuando se agregue el metodo addExercise al provider
       ref
           .read(exerciseListProvider.notifier)
           .addExercise(newExersice)

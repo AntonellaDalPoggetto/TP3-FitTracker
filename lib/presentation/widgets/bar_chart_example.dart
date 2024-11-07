@@ -60,7 +60,8 @@ class _SimpleBarChartState extends ConsumerState<SimpleBarChart> {
       }
     } else {
       List<Exercise> exercises = data as List<Exercise>;
-      exercises = exercises.where((ex) => ex.name == widget.variable).toList();
+      exercises = exercises.where((ex) => ex.name.toLowerCase() == widget.variable?.toLowerCase()).toList();
+
       if (exercises.length > 7) {
         exercises = exercises.sublist(exercises.length - 7);
       }

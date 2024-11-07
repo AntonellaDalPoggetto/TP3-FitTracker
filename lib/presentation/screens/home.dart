@@ -146,10 +146,9 @@ class _BodyView extends StatelessWidget {
             ),
           ),
         ),
-        // Usa Expanded para centrar el ChartsCarousel y darle espacio arriba y abajo
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32.0), // Ajusta este valor según sea necesario
+            padding: const EdgeInsets.symmetric(vertical: 32.0), 
             child: ChartsCarousel(),
           ),
         ),
