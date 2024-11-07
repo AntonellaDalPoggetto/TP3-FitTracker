@@ -1,3 +1,4 @@
+import 'package:fittracker/presentation/entities/chart.dart';
 import 'package:fittracker/presentation/providers/chart_provider.dart';
 import 'package:fittracker/presentation/widgets/bar_chart_example.dart';
 import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
@@ -43,22 +44,19 @@ class _BodyViewState extends ConsumerState<_BodyView> {
 
   void _addChart() {
     try {
-      String name = _selectedOption;
-      String? variable;
-      variable = _selectedValue;
+      final Chart newChart = Chart(
+        name: _selectedOption,
+        variable: _selectedValue, 
+        dateTime: DateTime.now()
+      );
 
-      ref.read(chartsProvider.notifier).update((state) {
-        return [
-          ...state,
-          CollapsibleChartWidget(
-            name: name,
-            variable: variable,
-            chart: SimpleBarChart(
-              variable: variable,
-            ),
-          ),
-        ];
-      });
+       ref.read(chartListProvider.notifier)
+           .addChart(newChart)
+           .then((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('grafico agregado con éxito')),
+            );   
+      });  
     } catch (error) {
       print("Error al agregar gráfico: $error");
     }
