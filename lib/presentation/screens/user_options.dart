@@ -34,7 +34,7 @@ class _UserOptionsView extends ConsumerState<UserOptions> {
               leading: const Icon(Icons.lock),
               title: const Text('Cambiar Contraseña'),
               onTap: () {
-                context.push('/home');       
+                context.push('/change_password');       
               },
             ),
             ListTile(
