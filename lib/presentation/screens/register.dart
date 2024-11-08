@@ -21,7 +21,7 @@ class _RegistrationView extends ConsumerState<Register> {
     final user = await auth.register(_emailController.text, _passwordController.text, _userNameController.text);
 
     if (user != null) {
-      context.go('/home');
+      context.go('/');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error al registrarse')),

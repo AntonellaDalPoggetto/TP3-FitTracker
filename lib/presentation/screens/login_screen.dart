@@ -22,7 +22,7 @@ class _LoginView extends ConsumerState<LoginScreen> {
     final auth = ref.read(authProvider);
     final user = await auth.login(_emailController.text, _passwordController.text);
     if (user != null) {
-      context.go('/home');
+      context.go('/');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error al iniciar sesión')),

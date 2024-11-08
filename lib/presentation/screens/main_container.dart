@@ -1,11 +1,13 @@
+import 'package:fittracker/presentation/screens/exercises_list_screen.dart';
+import 'package:fittracker/presentation/screens/graphics_modifier_screen.dart';
+import 'package:fittracker/presentation/screens/home.dart';
+import 'package:fittracker/presentation/screens/meals_list_screen.dart';
+import 'package:fittracker/presentation/screens/user_options.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
-import 'package:go_router/go_router.dart';
 
 class MainContainer extends StatefulWidget {
-  final Widget child;
-
-  const MainContainer({super.key, required this.child});
+  const MainContainer({super.key});
 
   @override
   MainContainerState createState() => MainContainerState();
@@ -14,34 +16,19 @@ class MainContainer extends StatefulWidget {
 class MainContainerState extends State<MainContainer> {
   int _selectedIndex = 0;
 
-  static final List<String> routes = <String>[
-    '/home',
-    '/meals_list',
-    '/graphics_modifier',
-    '/exercises_list',
-    '/user_options',
+  static final List<Widget> _screens = <Widget>[
+    Home(),
+    MealsListScreen(),
+    GraphicsModifierScreen(),
+    ExercisesListScreen(),
+    UserOptions(),
   ];
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    
-    final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.fullPath;
-    final currentIndex = routes.indexOf(currentLocation);
-
-    if (currentIndex != -1 && currentIndex != _selectedIndex) {
-      setState(() {
-        _selectedIndex = currentIndex;
-      });
-    }
-  }
 
   void _onItemTapped(int index) {
     if (_selectedIndex != index) {
       setState(() {
-        _selectedIndex = index; 
+        _selectedIndex = index;
       });
-      context.go(routes[index]);
     }
   }
 
@@ -60,14 +47,17 @@ class MainContainerState extends State<MainContainer> {
             child: child,
           );
         },
-        child: widget.child,
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: _screens,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
-        selectedItemColor: const Color(0xFF67B69B), 
-        unselectedItemColor: Colors.grey, 
-        currentIndex: _selectedIndex, 
-        onTap: _onItemTapped, 
+        selectedItemColor: const Color(0xFF67B69B),
+        unselectedItemColor: Colors.grey,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: 'Comidas'),
