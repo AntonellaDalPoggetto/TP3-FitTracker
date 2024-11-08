@@ -28,6 +28,29 @@ class UserNotifier extends StateNotifier<UserFS?> {
   void clearUser() {
     state = null;
   }
+  
+  
+  Future<void> changePassword(String newPassword) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await _firestore.collection('User').doc(user.uid).update({'password': newPassword});
+      }
+    } 
+    catch (e) {
+      print('Error updating password: $e');
+    }
+  }
+
+  addUser(UserFS userDB) async {   
+    await _firestore.collection('User').doc(userDB.userID).set({
+      'userID': userDB.userID,
+      'username': userDB.username,
+      'password': userDB.password,
+      'lastLogin': userDB.lastLogin,
+      'email': userDB.email,
+    });  
+  }
 }
 
 final userProvider = StateNotifierProvider<UserNotifier, UserFS?>((ref) {

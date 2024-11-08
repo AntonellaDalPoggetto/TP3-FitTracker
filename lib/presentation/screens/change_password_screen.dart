@@ -18,7 +18,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 
   Future<void> _changePassword() async {
     final auth = ref.read(authProvider);
-    final user = FirebaseAuth.instance.currentUser;
+    final user = auth.currentUser;
 
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -35,15 +35,12 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     }
 
     try {
-      // Re-autenticación con la contraseña actual
       final credential = EmailAuthProvider.credential(
         email: user.email!,
         password: _currentPasswordController.text,
       );
-      await user.reauthenticateWithCredential(credential);
 
-      // Cambio de contraseña
-      await user.updatePassword(_newPasswordController.text);
+      auth.resetPassword(credential, _newPasswordController.text);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Contraseña actualizada con éxito')),

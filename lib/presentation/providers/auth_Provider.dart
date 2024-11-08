@@ -1,10 +1,10 @@
+import 'package:fittracker/presentation/entities/user.dart';
 import 'package:fittracker/presentation/providers/chart_provider.dart';
 import 'package:fittracker/presentation/providers/exersice_list_provider.dart';
 import 'package:fittracker/presentation/providers/meal_list_provider.dart';
 import 'package:fittracker/presentation/providers/user_Provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
@@ -12,7 +12,6 @@ final authProvider = Provider<AuthService>((ref) => AuthService(ref));
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Ref ref;
 
   AuthService(this.ref);
@@ -29,20 +28,23 @@ class AuthService {
       String hashedPassword = sha256.convert(utf8.encode(password)).toString();
 
       if (user != null) {
-        await _firestore.collection('User').doc(user.uid).set({
-          'userID': user.uid,
-          'username': username,
-          'password': hashedPassword,
-          'lastLogin': DateTime.now(),
-          'email': email,
-        });
-        currentUsername = username;
-        
+
+        UserFS userDB = UserFS(
+          userID: user.uid,
+          username: username,
+          password: hashedPassword,
+          lastLogin: DateTime.now(),
+          email: email,
+        );     
+
+        currentUsername = username;        
         final userNotifier = ref.read(userProvider.notifier);
+        await userNotifier.addUser(userDB);
         await userNotifier.getCurrentUser();
       }
       return user;
-    } catch (e) {
+    } 
+    catch (e) {
       print('Error al registrar: $e');
       return null;
     }
@@ -72,6 +74,21 @@ class AuthService {
     ref.read(mealListProvider.notifier).clearState();    
     ref.read(exerciseListProvider.notifier).clearState();   
     ref.read(chartListProvider.notifier).clearState();   
+  }  
+
+  Future<void> resetPassword(credential, newPassword) async {    
+    final userNotifier = ref.read(userProvider.notifier);
+    final user = FirebaseAuth.instance.currentUser;
+
+    try {
+      await user?.reauthenticateWithCredential(credential);
+      await user?.updatePassword(newPassword);      
+      String hashedPassword = sha256.convert(utf8.encode(newPassword)).toString();
+      await userNotifier.changePassword(hashedPassword);
+    } 
+    catch (e) {
+      print('Error al actualizar la contraseña: $e');
+    }
   }
 
   User? get currentUser => _firebaseAuth.currentUser;
