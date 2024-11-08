@@ -39,7 +39,6 @@ class _BodyViewState extends ConsumerState<_BodyView> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    // Puedes inicializar el controlador con un valor si lo deseas
   }
 
   @override
@@ -69,7 +68,6 @@ class _BodyViewState extends ConsumerState<_BodyView> {
               border: OutlineInputBorder(),
             ),
             onChanged: (value) {
-              // Actualizamos la lista de ejercicios filtrada cada vez que cambia el texto
               ref.read(exerciseListProvider.notifier).filterByName(value);
             },
           ),
@@ -78,7 +76,6 @@ class _BodyViewState extends ConsumerState<_BodyView> {
             child: ListView.builder(
               itemCount: exerciseList.length,
               itemBuilder: (context, index) {
-                // Creamos una tarjeta por cada ejercicio
                 final exercise = exerciseList[index];
                 return ExerciseCard(exercise: exercise);
               },
@@ -91,7 +88,7 @@ class _BodyViewState extends ConsumerState<_BodyView> {
 }
 
 class ExerciseCard extends ConsumerWidget {
-  final Exercise exercise; // Recibe un objeto Exercise
+  final Exercise exercise;
 
   const ExerciseCard({super.key, required this.exercise});
 
@@ -112,38 +109,45 @@ class ExerciseCard extends ConsumerWidget {
         subtitle: Text(
             '${exercise.dateTime.day.toString()}/${exercise.dateTime.month.toString()}/${exercise.dateTime.year.toString()}'),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Series: ${exercise.sets}'),
-                Text('Repeticiones: ${exercise.reps}'),
-                Text('Peso levantado: ${exercise.weight}Kg'),
-                Text("Realizado el ${exercise.dateTime.day.toString()}/${exercise.dateTime.month.toString()}/${exercise.dateTime.year} a las ${exercise.dateTime.hour.toString()}:${exercise.dateTime.minute.toString()}"),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ConfirmDeleteDialog(
-                          title: 'Confirmar eliminación',
-                          content:
-                              '¿Estás seguro de que deseas eliminar esta comida?',
-                          onConfirm: () {
-                            ref
-                                .read(exerciseListProvider.notifier)
-                                .deleteExercise(exercise.exerciseID!);
-                          },
-                        );
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                ),
-              ],
-            ), // Muestra la fecha del ejercicio
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Series: ${exercise.sets}'),
+                  Text('Repeticiones: ${exercise.reps}'),
+                  Text('Peso levantado: ${exercise.weight}Kg'),
+                  Text(
+                    "Realizado el ${exercise.dateTime.day}/${exercise.dateTime.month}/${exercise.dateTime.year} a las ${exercise.dateTime.hour}:${exercise.dateTime.minute}",
+                  ),
+                ],
+              ),
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ConfirmDeleteDialog(
+                        title: 'Confirmar eliminación',
+                        content: '¿Estás seguro de que deseas eliminar este ejercicio?',
+                        onConfirm: () {
+                          ref
+                              .read(exerciseListProvider.notifier)
+                              .deleteExercise(exercise.exerciseID!);
+                        },
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(Icons.delete, color: Colors.red),
+              ),
+            ],
           ),
+        ),
         ],
       ),
     );

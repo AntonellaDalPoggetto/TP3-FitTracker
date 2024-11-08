@@ -1,7 +1,5 @@
 import 'package:fittracker/presentation/entities/chart.dart';
 import 'package:fittracker/presentation/providers/chart_provider.dart';
-import 'package:fittracker/presentation/widgets/bar_chart_example.dart';
-import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fittracker/presentation/providers/exersice_list_provider.dart';

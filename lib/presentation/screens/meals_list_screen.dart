@@ -111,13 +111,18 @@ class MealCard extends ConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Proteínas: ${meal.protein}g"),
-                Text("Carbohidratos: ${meal.carbs}g"),
-                Text("Calorías: ${meal.calories}kcal"),
-                Text("Consumido el: ${meal.dateTime.day.toString()}/${meal.dateTime.month.toString()}/${meal.dateTime.year.toString()} a las ${meal.dateTime.hour.toString()}:${meal.dateTime.minute.toString()}"),
+                Column(  
+                  children: [
+                    Text("Proteínas: ${meal.protein}g"),
+                    Text("Carbohidratos: ${meal.carbs}g"),
+                    Text("Calorías: ${meal.calories}kcal"),
+                    Text("Consumido el: ${meal.dateTime.day.toString()}/${meal.dateTime.month.toString()}/${meal.dateTime.year.toString()} a las ${meal.dateTime.hour.toString()}:${meal.dateTime.minute.toString()}"),
+                  ],
+                ),
                 IconButton(
                   onPressed: () {
                     showDialog(
@@ -128,9 +133,7 @@ class MealCard extends ConsumerWidget {
                           content:
                               '¿Estás seguro de que deseas eliminar esta comida?',
                           onConfirm: () {
-                            ref
-                                .read(mealListProvider.notifier)
-                                .deleteMeal(meal.mealID!);
+                            ref.read(mealListProvider.notifier).deleteMeal(meal.mealID!);
                           },
                         );
                       },
