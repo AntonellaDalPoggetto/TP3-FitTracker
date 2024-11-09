@@ -59,10 +59,10 @@ class MainContainerState extends State<MainContainer> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
           BottomNavigationBarItem(icon: Icon(Icons.fastfood), label: 'Comidas'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Graphics'),
-          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Exercises'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Gráficos'),
+          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Ejercicios'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
         ],
       ),

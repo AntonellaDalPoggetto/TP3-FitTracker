@@ -16,61 +16,82 @@ class CollapsibleChartWidget extends StatefulWidget {
 }
 
 class _CollapsibleChartWidgetState extends State<CollapsibleChartWidget> {
-  bool _isExpanded = false;
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [        
-        Row(
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ExpansionTile(
+        leading: const Icon(Icons.bar_chart, size: 40),
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Gráfico de ${widget.variable}"),
-            Row(
-              children: [
-                IconButton(
-                  icon: RotatedBox(
-                    quarterTurns: _isExpanded ? 1 : 0,
-                    child: const Icon(Icons.arrow_right),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isExpanded =
-                          !_isExpanded;
-                    });
-                  },
-                ),
-              ],
-            ),
           ],
         ),
-        if (_isExpanded)
-          Column(
-            children: [
-              Row(
-                children: [
-                  widget.name == "Comida"
-                      ? Text(
-                          widget.variable!,
-                          style: const TextStyle(color: Color(0xFF34D399)),
-                        )
-                      : Row(
-                          children: [
-                            Text("Repeticiones",
-                                style: TextStyle(color: Colors.green[900])),
-                            SizedBox(width: 20),
-                            const Text("Series", style: TextStyle(color: Colors.deepPurple)),
-                            SizedBox(width: 20),
-                            const Text("Peso", style: TextStyle(color: Color(0xFF34D399)))
-                          ],
-                        )
-                ],
-              ),
-              SizedBox(height: 300, child: widget.chart),
-            ],
-          )
-      ],
+        subtitle: Text("Nombre del gráfico: ${widget.name}"),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                widget.name == "Comida"
+                    ? Row(
+                        children: [
+                          IconButton(
+                              icon:
+                                  Icon(Icons.square, color: Color(0xFF34D399)),
+                              onPressed: null),
+                          Text(
+                            widget.variable!,
+                            style: const TextStyle(color: Color(0xFF34D399)),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                  icon:
+                                      Icon(Icons.square, color: Colors.deepPurple),
+                                  onPressed: null),
+                              const Text("Series",
+                                  style: TextStyle(color: Colors.deepPurple)),
+                            ],
+                          ),
+                          const SizedBox(width: 20),
+                          Row(
+                            children: [
+                              IconButton(
+                                  icon:
+                                      Icon(Icons.square, color: Color(0xFF34D399)),
+                                  onPressed: null),
+                              const Text("Peso",
+                                  style: TextStyle(color: Color(0xFF34D399))),
+                            ],
+                          ),
+                          const SizedBox(width: 20),
+                          Row(
+                            children: [
+                              IconButton(
+                                  icon:
+                                      Icon(Icons.square, color: Colors.green[900]),
+                                  onPressed: null),
+                              Text("Repeticiones",
+                                  style: TextStyle(color: Colors.green[900])),
+                            ],
+                          ),
+                        ],
+                      ),
+                const SizedBox(height: 16),
+                SizedBox(height: 300, child: widget.chart),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

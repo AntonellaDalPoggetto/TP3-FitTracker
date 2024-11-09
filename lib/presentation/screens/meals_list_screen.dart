@@ -98,7 +98,7 @@ class MealCard extends ConsumerWidget {
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ExpansionTile(
-        leading: const Icon(Icons.restaurant, size: 40),
+        leading: const Icon(Icons.fastfood, size: 40),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -116,6 +116,7 @@ class MealCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(  
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Proteínas: ${meal.protein}g"),
                     Text("Carbohidratos: ${meal.carbs}g"),

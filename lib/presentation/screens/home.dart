@@ -38,7 +38,9 @@ class _Header extends ConsumerState<Header> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
-    String username = user != null ? '${user.username[0].toUpperCase()}${user.username.substring(1)}' : "Usuario"; 
+    String username = user != null
+        ? '${user.username[0].toUpperCase()}${user.username.substring(1)}'
+        : "Usuario";
 
     return Container(
       decoration: BoxDecoration(
@@ -148,8 +150,24 @@ class _BodyView extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32.0), 
-            child: ChartsCarousel(),
+            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // Alineación a la izquierda
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    "Tus gráficos:",
+                    style: TextStyle(
+                      fontSize: 24, // Tamaño de fuente aumentado
+                      fontWeight: FontWeight.bold, // Negrita
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8), // Espacio entre el texto y el carrusel
+                Expanded(child: ChartsCarousel()), // Expande el carrusel
+              ],
+            ),
           ),
         ),
       ],

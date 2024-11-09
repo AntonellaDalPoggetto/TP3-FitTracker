@@ -5,7 +5,8 @@ import 'package:fittracker/presentation/widgets/bar_chart_example.dart';
 import 'package:fittracker/presentation/widgets/collapsible_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-StateProvider<List<CollapsibleChartWidget>> chartsProvider = StateProvider<List<CollapsibleChartWidget>>((ref){
+StateProvider<List<CollapsibleChartWidget>> chartsProvider =
+    StateProvider<List<CollapsibleChartWidget>>((ref) {
   return [];
 });
 
@@ -38,8 +39,10 @@ class ChartListNotifier extends StateNotifier<List<Chart>> {
       await doc.set(chart.toFirestore());
       state = [...state, chart];
 
-      ref.read(chartsProvider.notifier).update((state) {   
-        return [...state, CollapsibleChartWidget(
+      ref.read(chartsProvider.notifier).update((state) {
+        return [
+          ...state,
+          CollapsibleChartWidget(
             name: chart.name,
             variable: chart.variable,
             chart: SimpleBarChart(
@@ -48,7 +51,6 @@ class ChartListNotifier extends StateNotifier<List<Chart>> {
           ),
         ];
       });
-
     } catch (e) {
       print(e);
     }
@@ -57,31 +59,33 @@ class ChartListNotifier extends StateNotifier<List<Chart>> {
   Future<void> getAllCharts() async {
     final currentUser = _authService.currentUser;
 
-    final docs = _firestore.collection('Chart')
-                           .where('userID', isEqualTo: currentUser?.uid)
-                           .withConverter(fromFirestore: Chart.fromFirestore,
-                                          toFirestore: (Chart chart, _) => chart.toFirestore(),
-    );
+    final docs = _firestore
+        .collection('Chart')
+        .where('userID', isEqualTo: currentUser?.uid)
+        .withConverter(
+          fromFirestore: Chart.fromFirestore,
+          toFirestore: (Chart chart, _) => chart.toFirestore(),
+        );
 
     final chartsSnapshot = await docs.get();
     final charts = chartsSnapshot.docs.map((d) => d.data()).toList();
     state = charts;
 
-    final collapsibleWidgets = charts.map((chart) => CollapsibleChartWidget(
-          name: chart.name,
-          variable: chart.variable,
-          chart: SimpleBarChart(variable: chart.variable),
-        )).toList();
-        
+    final collapsibleWidgets = charts
+        .map((chart) => CollapsibleChartWidget(
+              name: chart.name,
+              variable: chart.variable,
+              chart: SimpleBarChart(variable: chart.variable),
+            ))
+        .toList();
+
     ref.read(chartsProvider.notifier).update((state) => collapsibleWidgets);
 
     _sortChartsByDate();
   }
 
   void _sortChartsByDate() {
-    state = [
-      ...state
-    ]..sort((a, b) {
+    state = [...state]..sort((a, b) {
         if (b.dateTime == null && a.dateTime == null) return 0;
         if (b.dateTime == null) return -1;
         if (a.dateTime == null) return 1;
@@ -94,7 +98,8 @@ class ChartListNotifier extends StateNotifier<List<Chart>> {
   }
 }
 
-final chartListProvider = StateNotifierProvider<ChartListNotifier, List<Chart>>((ref) {
+final chartListProvider =
+    StateNotifierProvider<ChartListNotifier, List<Chart>>((ref) {
   final authService = ref.read(authProvider);
   final notifier = ChartListNotifier(ref, authService);
   notifier.getAllCharts();

@@ -52,7 +52,7 @@ class _BodyViewState extends ConsumerState<_BodyView> {
            .addChart(newChart)
            .then((_) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('grafico agregado con éxito')),
+            const SnackBar(content: Text('Gráfico agregado con éxito')),
             );   
       });  
     } catch (error) {
@@ -160,22 +160,50 @@ class _BodyViewState extends ConsumerState<_BodyView> {
     final charts = ref.watch(chartsProvider);
 
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextButton(
-              onPressed: () {
-                _showOptionDialog(context);
-              },
-              child: const Text("Agregar nuevo gráfico"),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            Container(
+              height: 52,
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              child: OutlinedButton(
+                onPressed: () {
+                  _showOptionDialog(context);
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: const Color(0xFF34D399), width: 1),
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  shadowColor: Colors.black.withOpacity(0.7),
+                  elevation: 4,
+                ),
+                child: Text(
+                  'Agregar nuevo gráfico',
+                  style: TextStyle(
+                    color: const Color(0xFF34D399),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
             ),
-          ),
-          Column(
-            children: charts,
-          ),
-        ],
+            const SizedBox(height: 16),
+            // Lista de gráficos
+            if (charts.isEmpty)
+              const Center(child: Text("No hay gráficos agregados"))
+            else
+              Column(
+                children: charts,
+              ),
+          ],
+        ),
       ),
     );
   }
