@@ -4,7 +4,7 @@ import 'package:fittracker/presentation/providers/auth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
-  static const String name = 'change_password';
+  static const String name = 'cambio contraseña';
 
   const ChangePasswordScreen({super.key});
   @override

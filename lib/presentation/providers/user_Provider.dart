@@ -51,6 +51,26 @@ class UserNotifier extends StateNotifier<UserFS?> {
       'email': userDB.email,
     });  
   }
+    
+    
+  Future<void> updateUser({String? newName, int? newImageId}) async {
+    final user = _auth.currentUser;
+    if (user != null && state != null) {
+      try {
+        final Map<String, dynamic> updates = {};
+        if (newName != null) updates['username'] = newName;
+        if (newImageId != null) updates['idImage'] = newImageId;
+        await _firestore.collection('User').doc(user.uid).update(updates);
+
+        state = state!.copyWith(
+          username: newName ?? state!.username,
+          idImage: newImageId ?? state!.idImage,
+        );
+      } catch (e) {
+        print('Error updating user: $e');
+      }
+    }
+  }
 }
 
 final userProvider = StateNotifierProvider<UserNotifier, UserFS?>((ref) {

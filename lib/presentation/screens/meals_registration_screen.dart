@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class MealsRegistrationScreen extends StatelessWidget {
-  static const String name = 'Registra tu comida';
+  static const String name = 'Registro de comida';
 
   const MealsRegistrationScreen({super.key});
 

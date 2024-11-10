@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ExerciseRegistrationScreen extends StatelessWidget {
-  static const String name = 'Registra tu ejercicio';
+  static const String name = 'Registro de ejercicios';
 
   const ExerciseRegistrationScreen({super.key});
 

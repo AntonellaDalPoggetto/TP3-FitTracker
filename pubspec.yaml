@@ -31,6 +31,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - lib/assets/images/profile1.png
+    - lib/assets/images/profile2.png
+    - lib/assets/images/profile3.png
+    - lib/assets/images/profile4.png
+    - lib/assets/images/profile5.png
 
 # fonts:
 #  - family: Rubik

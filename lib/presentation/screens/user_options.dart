@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class UserOptions extends ConsumerStatefulWidget {
-  static const String name = 'User Options';
+  static const String name = 'Opciones de usuario';
 
   const UserOptions({super.key});
 
@@ -30,6 +30,13 @@ class _UserOptionsView extends ConsumerState<UserOptions> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Usuario'),
+              onTap: () {
+                context.push('/user_screen');       
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.lock),
               title: const Text('Cambiar Contraseña'),

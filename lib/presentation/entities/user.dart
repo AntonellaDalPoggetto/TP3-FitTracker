@@ -6,13 +6,15 @@ class UserFS {
   final String userID;
   final String email;
   final DateTime lastLogin;
+  final int idImage;
 
   UserFS({
     required this.username,
     required this.password,
     required this.userID,
     required this.email,
-    required this.lastLogin
+    required this.lastLogin,
+    this.idImage = 1,
   });
 
   
@@ -24,6 +26,7 @@ class UserFS {
       'lastLogin': lastLogin,
       'userID': userID,
       'email': email,
+      'idImage': idImage,
     };
   }
   
@@ -35,6 +38,25 @@ class UserFS {
       password: data['password'] ?? '',
       lastLogin: (data['lastLogin'] as Timestamp).toDate(),
       userID: (data['userID'] ?? ''),
+      idImage: data['idImage'] ?? 1,
+    );
+  }
+
+  UserFS copyWith({
+    String? userID,
+    String? username,
+    String? password,
+    DateTime? lastLogin,
+    String? email,
+    int? idImage,
+  }) {
+    return UserFS(
+      userID: userID ?? this.userID,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      lastLogin: lastLogin ?? this.lastLogin,
+      email: email ?? this.email,
+      idImage: idImage ?? this.idImage,
     );
   }
 }
