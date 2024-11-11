@@ -172,8 +172,7 @@ class _BodyView extends ConsumerWidget {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.5),
-                    offset: const Offset(
-                        1, 4),
+                    offset: const Offset(1, 4),
                     blurRadius: 4,
                   ),
                 ],

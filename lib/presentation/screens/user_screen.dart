@@ -1,4 +1,5 @@
 import 'package:fittracker/presentation/providers/user_Provider.dart';
+import 'package:fittracker/utils/profile_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,13 +16,6 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   int? _selectedImageId;
-  final List<String> profileImages = [
-    'lib/assets/images/profile1.png',
-    'lib/assets/images/profile2.png',
-    'lib/assets/images/profile3.png',
-    'lib/assets/images/profile4.png',
-    'lib/assets/images/profile5.png',
-  ];
 
   @override
   void initState() {
@@ -47,11 +41,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       context: context,
       builder: (context) {
         return GridView.builder(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(30),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
+            crossAxisCount: 3,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20,
           ),
           itemCount: profileImages.length,
           itemBuilder: (context, index) {
@@ -61,7 +55,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 Navigator.pop(context);
               },
               child: CircleAvatar(
-                radius: 40,
+                radius: 10,
                 backgroundImage: AssetImage(profileImages[index]),
               ),
             );
@@ -71,10 +65,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final currentUser = ref.watch(userProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Editar Usuario"),
@@ -92,10 +84,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               GestureDetector(
                 onTap: _selectProfileImage,
                 child: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: AssetImage(
-                    profileImages[(_selectedImageId ?? ref.read(userProvider)?.idImage ?? 1) - 1],
-                  ),
+                  radius: 60,
+                  backgroundImage: AssetImage(getProfileImageById(_selectedImageId)),                  
                 ),
               ),
               const SizedBox(height: 20),              
@@ -110,9 +100,32 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _saveChanges,
-                child: const Text("Guardar cambios"),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: const Offset(1, 4),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child : ElevatedButton(
+                  onPressed: _saveChanges,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF34D399),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20,
+                    ),
+                  ),
+                  child: const Text("GUARDAR"),
+                ),
               ),
             ],
           ),
