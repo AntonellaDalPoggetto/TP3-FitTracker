@@ -1,5 +1,6 @@
 import 'package:fittracker/presentation/providers/user_Provider.dart';
 import 'package:fittracker/presentation/widgets/charts_carousel.dart';
+import 'package:fittracker/utils/profile_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,9 +39,8 @@ class _Header extends ConsumerState<Header> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
-    String username = user != null
-        ? '${user.username[0].toUpperCase()}${user.username.substring(1)}'
-        : "Usuario";
+    int? selectedImageId = user?.idImage;
+    String username = user != null ? '${user.username[0].toUpperCase()}${user.username.substring(1)}' : "Usuario";
 
     return Container(
       decoration: BoxDecoration(
@@ -49,11 +49,10 @@ class _Header extends ConsumerState<Header> {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
-            radius: 30,
-            backgroundImage: NetworkImage(
-                'https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png'),
-          ),
+            CircleAvatar(
+              radius: 25,
+              backgroundImage: AssetImage(getProfileImageById(selectedImageId)),                  
+            ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(

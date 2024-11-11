@@ -42,6 +42,8 @@ class UserFS {
     );
   }
 
+  String? get imageUrl => null;
+
   UserFS copyWith({
     String? userID,
     String? username,

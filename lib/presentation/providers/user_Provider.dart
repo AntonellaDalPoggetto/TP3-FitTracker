@@ -53,7 +53,7 @@ class UserNotifier extends StateNotifier<UserFS?> {
   }
     
     
-  Future<void> updateUser({String? newName, int? newImageId}) async {
+  Future<void> updateUser({String? newName, int? newImageId, String? newImageUrl}) async {
     final user = _auth.currentUser;
     if (user != null && state != null) {
       try {
