@@ -28,6 +28,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   intl: ^0.19.0
+  flutter_launcher_icons: ^0.9.2
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "lib/assets/icons/lightLogoFT.png"
 
 flutter:
   uses-material-design: true
@@ -40,7 +46,8 @@ flutter:
     - lib/assets/images/profile6.png
     - lib/assets/images/profile7.png
     - lib/assets/images/profile8.png
-    - lib/assets/images/profile9.png
+    - lib/assets/icons/lightLogoFT.png
+
 
 # fonts:
 #  - family: Rubik
